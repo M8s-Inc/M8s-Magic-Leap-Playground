@@ -23,6 +23,7 @@ public class PubNubGestures : MonoBehaviour
         pnConfiguration.SubscribeKey = "sub-c-2e822568-1d76-11eb-8a07-eaf684f78515";
         pnConfiguration.Secure = true;
         pubnub = new PubNub(pnConfiguration);
+
         MLHandTracking.Start(); // Start the hand tracking.
         gestures = new MLHandTracking.HandKeyPose[3]; //Assign the gestures we will look for.
         gestures[0] = MLHandTracking.HandKeyPose.Fist;

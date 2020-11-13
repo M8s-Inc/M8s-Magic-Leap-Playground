@@ -36,6 +36,9 @@ public class PubNubGestures : MonoBehaviour
     {
         MLHandTracking.Stop();
     }
+
+    //Original Pubnub Update
+    /*
     void Update()
     {
         if (sendTimeController <= Time.deltaTime)
@@ -118,6 +121,136 @@ public class PubNubGestures : MonoBehaviour
             sendTimeController -= Time.deltaTime; // Update the timer.
         }
     }
+    */
+
+    void Update()
+    {
+        if (sendTimeController <= Time.deltaTime)
+        { // Restrict how often messages can be sent.
+            
+            //Light 1
+            if (GetGesture(MLHandTracking.Left, MLHandTracking.HandKeyPose.Thumb) )
+            {
+                pubnub.Publish()
+                    .Channel("control")
+                    .Message("lgt-1-on")
+                    .Async((result, status) => {
+                        if (!status.Error)
+                        {
+                            Debug.Log(string.Format("Publish Timetoken: {0}", result.Timetoken));
+                        }
+                        else
+                        {
+                            Debug.Log(status.Error);
+                            Debug.Log(status.ErrorData.Info);
+                        }
+                    });
+                Debug.Log("Light 1 on");
+                sendTimeController = 0.1f; // Stop multiple messages from being sent.
+            }
+            else if (GetGesture(MLHandTracking.Left, MLHandTracking.HandKeyPose.Fist))
+            {
+                pubnub.Publish()
+                    .Channel("control")
+                    .Message("lgt-1-off")
+                    .Async((result, status) => {
+                        if (!status.Error)
+                        {
+                            Debug.Log(string.Format("Publish Timetoken: {0}", result.Timetoken));
+                        }
+                        else
+                        {
+                            Debug.Log(status.Error);
+                            Debug.Log(status.ErrorData.Info);
+                        }
+                    });
+                Debug.Log("Light 1 off");
+
+                sendTimeController = 0.1f; // Stop multiple messages from being sent.
+            }
+            else if (GetGesture(MLHandTracking.Left, MLHandTracking.HandKeyPose.Finger))
+            {
+                pubnub.Publish()
+                    .Channel("control")
+                    .Message("lgt-1-changel")
+                    .Async((result, status) => {
+                        if (!status.Error)
+                        {
+                            Debug.Log(string.Format("Publish Timetoken: {0}", result.Timetoken));
+                        }
+                        else
+                        {
+                            Debug.Log(status.Error);
+                            Debug.Log(status.ErrorData.Info);
+                        }
+                    });
+                sendTimeController = 0.9f; // Stop multiple messages from being sent.
+            }
+            else if (GetGesture(MLHandTracking.Right, MLHandTracking.HandKeyPose.Thumb)) //--------------- Light 2 ------------------------------
+            {
+                pubnub.Publish()
+                    .Channel("control")
+                    .Message("lgt-2-on")
+                    .Async((result, status) => {
+                        if (!status.Error)
+                        {
+                            Debug.Log(string.Format("Publish Timetoken: {0}", result.Timetoken));
+                        }
+                        else
+                        {
+                            Debug.Log(status.Error);
+                            Debug.Log(status.ErrorData.Info);
+                        }
+                    });
+                sendTimeController = 0.1f; // Stop multiple messages from being sent.
+                Debug.Log("Light 2 on");
+
+            }
+            else if (GetGesture(MLHandTracking.Right, MLHandTracking.HandKeyPose.Fist))
+            {
+                pubnub.Publish()
+                    .Channel("control")
+                    .Message("lgt-2-off")
+                    .Async((result, status) => {
+                        if (!status.Error)
+                        {
+                            Debug.Log(string.Format("Publish Timetoken: {0}", result.Timetoken));
+                        }
+                        else
+                        {
+                            Debug.Log(status.Error);
+                            Debug.Log(status.ErrorData.Info);
+                        }
+                    });
+                sendTimeController = 0.1f; // Stop multiple messages from being sent.
+                Debug.Log("Light 2 off");
+
+            }
+            else if (GetGesture(MLHandTracking.Right, MLHandTracking.HandKeyPose.Finger))
+            {
+                pubnub.Publish()
+                    .Channel("control")
+                    .Message("lgt-2-changer")
+                    .Async((result, status) => {
+                        if (!status.Error)
+                        {
+                            Debug.Log(string.Format("Publish Timetoken: {0}", result.Timetoken));
+                        }
+                        else
+                        {
+                            Debug.Log(status.Error);
+                            Debug.Log(status.ErrorData.Info);
+                        }
+                    });
+                sendTimeController = 0.9f; // Stop multiple messages from being sent.
+            }
+        }
+        else
+        {
+            sendTimeController -= Time.deltaTime; // Update the timer.
+        }
+    }
+
     bool GetGesture(MLHandTracking.Hand hand,  MLHandTracking.HandKeyPose type)
     {
         if (hand != null)

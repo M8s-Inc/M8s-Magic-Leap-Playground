@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf5b356e131a944286fec26d7c40b4e, type: 3}
   m_Name: MagicLeapManifestSettings
   m_EditorClassIdentifier: 
-  m_MinimumAPILevel: 5
+  m_MinimumAPILevel: 8
   m_PrivilegeGroups:
   - m_Name: Autogranted
     m_Privileges:
@@ -29,25 +29,25 @@ MonoBehaviour:
       m_Enabled: 1
       m_Name: BatteryInfo
     - m_ApiLevel: 6
-      m_Enabled: 0
+      m_Enabled: 1
       m_Name: BluetoothAdapterExternalApp
     - m_ApiLevel: 6
-      m_Enabled: 0
+      m_Enabled: 1
       m_Name: BluetoothAdapterUser
     - m_ApiLevel: 6
-      m_Enabled: 0
+      m_Enabled: 1
       m_Name: BluetoothGattWrite
     - m_ApiLevel: 1
       m_Enabled: 1
       m_Name: ConnectBackgroundMusicService
     - m_ApiLevel: 8
-      m_Enabled: 0
+      m_Enabled: 1
       m_Name: ConnectionAccess
     - m_ApiLevel: 1
       m_Enabled: 1
       m_Name: ControllerPose
     - m_ApiLevel: 7
-      m_Enabled: 0
+      m_Enabled: 1
       m_Name: DesktopCompanion
     - m_ApiLevel: 1
       m_Enabled: 1
@@ -59,7 +59,7 @@ MonoBehaviour:
       m_Enabled: 1
       m_Name: GesturesSubscribe
     - m_ApiLevel: 6
-      m_Enabled: 0
+      m_Enabled: 1
       m_Name: HandMesh
     - m_ApiLevel: 1
       m_Enabled: 1
@@ -83,10 +83,10 @@ MonoBehaviour:
       m_Enabled: 0
       m_Name: Occlusion
     - m_ApiLevel: 6
-      m_Enabled: 0
+      m_Enabled: 1
       m_Name: PcfRead
     - m_ApiLevel: 6
-      m_Enabled: 0
+      m_Enabled: 1
       m_Name: PwFoundObjRead
     - m_ApiLevel: 1
       m_Enabled: 1
@@ -98,7 +98,7 @@ MonoBehaviour:
       m_Enabled: 1
       m_Name: ScreensProvider
     - m_ApiLevel: 6
-      m_Enabled: 0
+      m_Enabled: 1
       m_Name: SecureBrowserWindow
     - m_ApiLevel: 5
       m_Enabled: 1
@@ -124,13 +124,13 @@ MonoBehaviour:
       m_Enabled: 1
       m_Name: CoarseLocation
     - m_ApiLevel: 8
-      m_Enabled: 0
+      m_Enabled: 1
       m_Name: Expressions
     - m_ApiLevel: 1
       m_Enabled: 1
       m_Name: LocalAreaNetwork
     - m_ApiLevel: 8
-      m_Enabled: 0
+      m_Enabled: 1
       m_Name: ObjectData
   - m_Name: Reality
     m_Privileges:
@@ -147,13 +147,13 @@ MonoBehaviour:
       m_Enabled: 1
       m_Name: ComputerVision
     - m_ApiLevel: 8
-      m_Enabled: 0
+      m_Enabled: 1
       m_Name: ConnectionAudioCaptureStreaming
     - m_ApiLevel: 8
-      m_Enabled: 0
+      m_Enabled: 1
       m_Name: ConnectionVideoCaptureStreaming
     - m_ApiLevel: 7
-      m_Enabled: 0
+      m_Enabled: 1
       m_Name: FineLocation
     - m_ApiLevel: 1
       m_Enabled: 1

@@ -13,7 +13,7 @@ Next goals: WS2812B LED Strip control & Color wheel interactions. ( I think i sh
 Pictures, Videos, and wiring diagrams to come.
 
 # Unity
-Project Scene: 
+Project Scene: Scenes/M8s Smart Home - V 0.1
 Gathered different functionalities from samples and started brainstorming my requirements.
 Functionalities I'm playing with: 
 * Image Tracking (would be fun to have interactions with art around the house)

@@ -10,8 +10,6 @@ public class PubNubGestures : MonoBehaviour
     public float sendTimeController;
     public static PubNub pubnub;
 
-
-    //private  MLHandTracking.HandKeyPose[] gestures; // Holds the different hand poses we will look for.
     private MLHandTracking.HandKeyPose[] gestures; // Holds the different hand poses we will look for.
 
 

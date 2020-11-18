@@ -63,7 +63,8 @@ public class MagicLeapController : MonoBehaviour
     public LayerMask layerMask;
 
     //Focued Object variables
-    public GameObject currentFocusedDevice;
+    [SerializeField, Tooltip("Current Device Being Focused.")]
+    public GameObject currentFocusedDevice = null;
 
     // Start is called before the first frame update
     void Start()
@@ -80,7 +81,6 @@ public class MagicLeapController : MonoBehaviour
 
         MLHandTracking.KeyPoseManager.EnableKeyPoses(m_gestures, true, false); // Enable the hand poses.
 
-        //_raycastHead.gameObject.SetActive(true);
         EnableRaycast(_raycastHead);
 
     }
@@ -93,11 +93,12 @@ public class MagicLeapController : MonoBehaviour
         RaycastHit hitInfo = new RaycastHit();
         if(Physics.Raycast(ray, out hitInfo, 100, layerMask))
         {
-            FocusDevice(hitInfo.collider.transform);
+            Debug.Log("Gaze Raycast hit: " + hitInfo.transform.gameObject.name);
+            FocusDevice(hitInfo.transform.gameObject);
         }
         else
         {
-            if(!currentFocusedDevice)
+            if(currentFocusedDevice)
             {
                 ClearFocus();
             }
@@ -184,13 +185,16 @@ public class MagicLeapController : MonoBehaviour
     }
 
 
-    private void FocusDevice(Transform device)
+    private void FocusDevice(GameObject device)
     {
-        currentFocusedDevice = device.GetComponent<GameObject>();
+
+        currentFocusedDevice = device;
 
         //Is there any logic I need to put here to go through and only run if they have this component?
         //should I make the GazeFocus behavior a seperate script that each device also has on its gameObject and just references it?
         currentFocusedDevice.GetComponent<LightDeviceContoller>().GazeFocusedOnDevice();
+
+        Debug.Log("Device Focused: " + currentFocusedDevice.name);
 
     }
 
@@ -199,6 +203,9 @@ public class MagicLeapController : MonoBehaviour
         //should clear focus off the last focused device...
         currentFocusedDevice.GetComponent<LightDeviceContoller>().ClearGazeOnDevice();
         currentFocusedDevice = null;
+
+        Debug.Log("Focus Cleared");
+
     }
     bool GetGesture(MLHandTracking.Hand hand, MLHandTracking.HandKeyPose type)
     {

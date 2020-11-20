@@ -22,27 +22,23 @@ public class LightDeviceContoller : MonoBehaviour
     [SerializeField, Tooltip("Default Material")]
     public Material m_defaultMaterial;
 
-    //public Material m_defaultMaterial2;
-
-
     public Material m_mat1;
     public Material m_mat2;
     public Material m_mat3;
 
     [SerializeField, Tooltip("Current Material")]
     public Material currentMaterial;
-    //public Material m_mat4;
+
+    //popup animator
+    [SerializeField, Tooltip("UI & Device Tooltip popup")]
+    public GameObject deviceUI;
+    public Animator popupAnim;
 
     //private MLHandTracking.HandKeyPose[] gestures; // Holds the different hand poses we will look for.
 
     void Awake()
     {
-        //MLHandTracking.Start(); // Start the hand tracking.
-        //gestures = new MLHandTracking.HandKeyPose[3]; //Assign the gestures we will look for.
-        //gestures[0] = MLHandTracking.HandKeyPose.Fist;
-        //gestures[1] = MLHandTracking.HandKeyPose.Thumb;
-        //gestures[2] = MLHandTracking.HandKeyPose.Finger;
-        //MLHandTracking.KeyPoseManager.EnableKeyPoses(gestures, true, false); // Enable the hand poses.
+
     }
 
     // Start is called before the first frame update
@@ -60,6 +56,8 @@ public class LightDeviceContoller : MonoBehaviour
             m_magicLeapController = Camera.main.GetComponent<MagicLeapController>();
         }
 
+
+
     }
 
     // Update is called once per frame
@@ -68,6 +66,9 @@ public class LightDeviceContoller : MonoBehaviour
         //Enable hand gesture inputs if object is being focused. Maybe I need to create an invisible bubble to expand the raycast-hitable area.
         if(m_gFocusOfGaze)
         {
+            deviceUI.SetActive(true);
+            popupAnim.SetTrigger("OpenPopup");
+
             if (lastLeftHandPose != CurrentLeftHandPose.OpenHand && m_magicLeapController.m_currentLeftPose == CurrentLeftHandPose.OpenHand)
             {
                 Debug.Log("inside device if openhand");
@@ -114,6 +115,11 @@ public class LightDeviceContoller : MonoBehaviour
             //    m_meshRenderer.material = currentMaterial;
             //}
         }
+        else
+        {
+            StartCoroutine(WaitToDisableDeviceUI());
+            popupAnim.SetTrigger("ClosePopup");
+        }
 
     }
 
@@ -125,5 +131,24 @@ public class LightDeviceContoller : MonoBehaviour
     public void ClearGazeOnDevice()
     {
         m_gFocusOfGaze = false;
+    }
+
+    IEnumerator WaitToDisableDeviceUI()
+    {
+        float currentTime = 0;
+
+        while (currentTime < 3)
+        {
+            yield return null;
+
+            if (m_gFocusOfGaze == true)
+            {
+                yield break;
+            }
+            currentTime += Time.deltaTime;
+        }
+
+        deviceUI.SetActive(false);
+
     }
 }

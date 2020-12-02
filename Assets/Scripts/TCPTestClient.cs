@@ -17,6 +17,8 @@ public class TCPTestClient : MonoBehaviour {
     public Button m_AppleTVMenu_Button, m_AppleTVHome_Button, m_AppleTVUp_Button, m_AppleTVDown_Button, m_AppleTVLeft_Button,
                   m_AppleTVRight_Button, m_AppleTVSelect_Button, m_AppleTVBackSkip_Button, m_AppleTVRewind_Button, m_AppleTVPlayPause_Button,
                   m_AppleTVFFWD_Button, m_AppleTVForwardSkip_Button;
+
+    public Slider m_AppleTVPlayTime_Slider;
     #endregion
 
     // Use this for initialization 	
@@ -35,6 +37,9 @@ public class TCPTestClient : MonoBehaviour {
         m_AppleTVFFWD_Button.onClick.AddListener(delegate { TaskWithParameters("AppleTV_FFWD_Press"); });
         m_AppleTVForwardSkip_Button.onClick.AddListener(delegate { TaskWithParameters("AppleTV_ForwardSkip_Press"); });
 
+        //If I use onValueChanged, will this send every damn time the value is updated? for playime that doesnt work. 
+        //Maybe I should have a virtual bar for the progress? and update the real one when I press...?
+        m_AppleTVPlayTime_Slider.onValueChanged.AddListener(delegate { SliderTask("AppleTV_PlayTime_Change", m_AppleTVPlayTime_Slider.value); });
 
         //m_AppleTVUp_Button.onClick.AddListener(() => ButtonClicked(42));
     }
@@ -82,6 +87,38 @@ public class TCPTestClient : MonoBehaviour {
             Debug.Log("Socket exception: " + socketException);
         }
     }
+
+
+    void SliderTask(string message, float value)
+    {
+        //Output this to console when the Button2 is clicked
+        Debug.Log(message + "@" + value);
+
+        if (socketConnection == null)
+        {
+            return;
+        }
+        try
+        {
+            // Get a stream object for writing.             
+            NetworkStream stream = socketConnection.GetStream();
+            if (stream.CanWrite)
+            {
+                //string clientMessage = "Client Pressed G";
+                string clientMessage = message + "@" + value;
+                // Convert string message to byte array.                 
+                byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(clientMessage);
+                // Write byte array to socketConnection stream.                 
+                stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
+                Debug.Log("Client sent message" + clientMessage + " should be received by server");
+            }
+        }
+        catch (SocketException socketException)
+        {
+            Debug.Log("Socket exception: " + socketException);
+        }
+    }
+
 
     void ButtonClicked(int buttonNo)
     {

@@ -37,9 +37,10 @@ public class TCPTestClient : MonoBehaviour {
         m_AppleTVFFWD_Button.onClick.AddListener(delegate { TaskWithParameters("AppleTV_FFWD_Press"); });
         m_AppleTVForwardSkip_Button.onClick.AddListener(delegate { TaskWithParameters("AppleTV_ForwardSkip_Press"); });
 
-        //If I use onValueChanged, will this send every damn time the value is updated? for playime that doesnt work. 
+        //If I use onValueChanged, will this send every damn time the value is updated? for playtime that doesnt work. 
         //Maybe I should have a virtual bar for the progress? and update the real one when I press...?
         m_AppleTVPlayTime_Slider.onValueChanged.AddListener(delegate { SliderTask("AppleTV_PlayTime_Change", m_AppleTVPlayTime_Slider.value); });
+        //m_AppleTVPlayTime_Slider.
 
         //m_AppleTVUp_Button.onClick.AddListener(() => ButtonClicked(42));
     }

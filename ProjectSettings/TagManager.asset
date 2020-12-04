@@ -7,6 +7,7 @@ TagManager:
   - MLSpatialMapperMesh
   - Device
   - Ground
+  - Controller
   layers:
   - Default
   - TransparentFX

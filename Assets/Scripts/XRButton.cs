@@ -12,7 +12,9 @@ public class XRButton : MonoBehaviour
 
     public bool isPressed;
 
-    float delay = .5f;
+    public float delay = .5f;
+    public float maxbuttonRiseDelta = 0.05f;
+
     float currenttime;
 
     void Start()
@@ -34,7 +36,7 @@ public class XRButton : MonoBehaviour
             if (currenttime < 0)
             {
                 //move towards start position.
-                Vector3 posToMove = Vector3.MoveTowards(transform.position, start.position, 0.05f * Time.deltaTime);
+                Vector3 posToMove = Vector3.MoveTowards(transform.position, start.position, maxbuttonRiseDelta * Time.deltaTime);
                 transform.position = posToMove;
             }
 

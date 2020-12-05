@@ -12,9 +12,10 @@ public class M8MLController : MonoBehaviour
 {
 
     public LayerMask m_defaultLayer;
+    public LayerMask m_UILayer;
 
-    //private Ray placementRay = new Ray();
-    //private RaycastHit placementRayHit = new RaycastHit();
+    //private Ray ControllerRayCast = new Ray();
+    //private RaycastHit ControllerRayCastHit = new RaycastHit();
 
     public bool devicePlacementActive = true;
 
@@ -25,8 +26,8 @@ public class M8MLController : MonoBehaviour
     [Space, SerializeField, Tooltip("MLControllerConnectionHandlerBehavior reference.")]
     private MLControllerConnectionHandlerBehavior _controllerConnectionHandler = null;
 
-    private Ray placementRay;
-    private RaycastHit placementRayHit;
+    private Ray ControllerRayCast;
+    private RaycastHit ControllerRayCastHit;
 
     //Placement indicator & variables
     public Transform placementRef;
@@ -60,33 +61,42 @@ public class M8MLController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        placementRay = new Ray(m_rayCastOrigin.position, m_rayCastOrigin.forward);
+        ControllerRayCast = new Ray(m_rayCastOrigin.position, m_rayCastOrigin.forward);
     }
 
     // Update is called once per frame
     void Update()
     {
+        //How costly is it do this every frame? I need to look back into compute calculations and big O notation.
+        ControllerRayCast = new Ray(m_rayCastOrigin.position, m_rayCastOrigin.forward);
+        ControllerRayCastHit = new RaycastHit();
+
+        //if device placement mode is active...
         if (devicePlacementActive)
         {
-            placementRay = new Ray(m_rayCastOrigin.position, m_rayCastOrigin.forward);
-            placementRayHit = new RaycastHit();
-
-            if (Physics.Raycast(placementRay, out placementRayHit, 100.0f, m_defaultLayer))
+            
+            if (Physics.Raycast(ControllerRayCast, out ControllerRayCastHit, 100.0f, m_defaultLayer))
             {
                 Debug.Log("inside placement ref setting");
                 placementRef.gameObject.SetActive(true);
 
-                Vector3 desiredPosition = placementRayHit.point;
+                Vector3 desiredPosition = ControllerRayCastHit.point;
                 Vector3 vecToDesired = desiredPosition - placementRef.position;
 
                 vecToDesired *= smoothnessFactor;
                 placementRef.position += vecToDesired;
 
-                posToMove = new Vector3(placementRayHit.point.x, placementRayHit.point.y, placementRayHit.point.z);
+                posToMove = new Vector3(ControllerRayCastHit.point.x, ControllerRayCastHit.point.y, ControllerRayCastHit.point.z);
                 //StartCoroutine(TeleportWithFade(posToMove));
 
             }
+        }
+        else //UI interactions enabled?
+        {
+            if (Physics.Raycast(ControllerRayCast, out ControllerRayCastHit, 100.0f, m_UILayer))
+            {
 
+            }
         }
 
     }
@@ -103,32 +113,35 @@ public class M8MLController : MonoBehaviour
             //_raycastMode = (RaycastMode)((int)(_raycastMode + 1) % _modeCount);
             //UpdateRaycastMode();
             Debug.Log("Bumper Press");
-            PlaceDevice(posToMove);
+            if (devicePlacementActive)
+            {
+                PlaceDevice(posToMove);
+            }
         }
     }
 
     /*
     public void PlaceDevice()
     {
-        Ray placementRay = new Ray(m_rayCastOrigin.position, m_rayCastOrigin.forward);
-        RaycastHit placementRayHit = new RaycastHit();
+        Ray ControllerRayCast = new Ray(m_rayCastOrigin.position, m_rayCastOrigin.forward);
+        RaycastHit ControllerRayCastHit = new RaycastHit();
         
 
-        //if (Physics.Raycast(placementRay, 100.0f, m_defaultLayer))
-        if (Physics.Raycast(placementRay, out placementRayHit, 100.0f, m_defaultLayer))
+        //if (Physics.Raycast(ControllerRayCast, 100.0f, m_defaultLayer))
+        if (Physics.Raycast(ControllerRayCast, out ControllerRayCastHit, 100.0f, m_defaultLayer))
         {
             Debug.Log("inside Raycast ");
 
             if (!m_placedObject)
             {
                 //returns the transofrm 
-                m_placedObject = Instantiate(m_objectPrefab, placementRayHit.point, Quaternion.identity).transform;
+                m_placedObject = Instantiate(m_objectPrefab, ControllerRayCastHit.point, Quaternion.identity).transform;
                 Debug.Log("placed object was null");
 
             }
             else
             {
-                m_placedObject.position = placementRayHit.point;
+                m_placedObject.position = ControllerRayCastHit.point;
                 Debug.Log("placed object wasnt null");
 
             }
@@ -139,21 +152,21 @@ public class M8MLController : MonoBehaviour
     {
 
 
-        //if (Physics.Raycast(placementRay, 100.0f, m_defaultLayer))
-        if (Physics.Raycast(placementRay, out placementRayHit, 100.0f, m_defaultLayer))
+        //if (Physics.Raycast(ControllerRayCast, 100.0f, m_defaultLayer))
+        if (Physics.Raycast(ControllerRayCast, out ControllerRayCastHit, 100.0f, m_defaultLayer))
         {
             Debug.Log("inside Raycast ");
 
             if (!m_placedObject)
             {
                 //returns the transofrm 
-                m_placedObject = Instantiate(m_objectPrefab, placementRayHit.point, Quaternion.identity).transform;
+                m_placedObject = Instantiate(m_objectPrefab, ControllerRayCastHit.point, Quaternion.identity).transform;
                 Debug.Log("placed object was null");
 
             }
             else
             {
-                m_placedObject.position = placementRayHit.point;
+                m_placedObject.position = ControllerRayCastHit.point;
                 Debug.Log("placed object wasnt null");
 
             }

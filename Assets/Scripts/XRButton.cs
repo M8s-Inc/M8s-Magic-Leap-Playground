@@ -5,13 +5,46 @@ using UnityEngine;
 public class XRButton : MonoBehaviour
 {
     private Animator anim;
-
+    
+    //add a collider to start position?
     public Transform start;
     public Transform end;
+
+    public bool isPressed;
+
+    float delay = .5f;
+    float currenttime;
 
     void Start()
     {
         anim = GetComponent<Animator>();
+        anim.enabled = false;
+
+        isPressed = false;
+        currenttime = delay;
+    }
+
+    private void Update()
+    {
+        if(!isPressed)
+        {
+
+            currenttime -= Time.deltaTime;
+
+            if (currenttime < 0)
+            {
+                //move towards start position.
+                Vector3 posToMove = Vector3.MoveTowards(transform.position, start.position, 0.05f * Time.deltaTime);
+                transform.position = posToMove;
+            }
+
+            if(transform.position == start.position)
+            {
+                isPressed = false;
+            }
+        }
+
+           
     }
 
     private void OnTriggerStay(Collider other)
@@ -32,30 +65,41 @@ public class XRButton : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Controller")// && Input.GetKey(KeyCode.G))
+        {
+            //anim.
+            anim.enabled = false;
+            isPressed = true;
+        }
+    }
+
     private void OnTriggerExit(Collider other)
     {
 
         //-0.324 & -0.351 are my standard outputs. I guess these coordinates are in world space not local? 
         if (other.tag == "Controller")// && Input.GetKey(KeyCode.G))
         {
-            if(transform.position.y > end.position.y + 0.005f)
-            {
-                Debug.Log(this.name + "world position inside press animation trigger. y pos:" + transform.position.y);
+            //if(transform.position.y > end.position.y + 0.005f)
+            //{
+            //    Debug.Log(this.name + "world position inside press animation trigger. y pos:" + transform.position.y);
 
-                anim.SetTrigger("ButtonPressed");
-            }
+            //    anim.SetTrigger("ButtonPressed");
+            //}
 
             if (transform.localPosition.y < end.localPosition.y + 0.005f)
             {
                 Debug.Log(this.name + "local position inside press animation trigger. y pos:" + transform.position.y);
-
-                anim.SetTrigger("ButtonPressed");
+                //anim.enabled = true;
+                //anim.SetTrigger("ButtonPressed");
             }
 
             Debug.Log(this.name + "XR Button Trigger Exity pos:" + transform.position.y + " & " + end.position.y);
             Debug.Log(this.name + "XR Button Trigger Exity local pos:" + transform.localPosition.y + " & " + end.localPosition.y);
 
-
+            isPressed = false;
+            currenttime = delay;
         }
     }
 }

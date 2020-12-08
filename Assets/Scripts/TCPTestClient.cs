@@ -128,8 +128,10 @@ public class TCPTestClient : MonoBehaviour {
     }
 
 
-    private void ConnectToTcpServer () { 		
-		try {  			
+    private void ConnectToTcpServer () {
+        Debug.Log(" Inside ConnectToTcpServer");
+
+        try {  			
 			clientReceiveThread = new Thread (new ThreadStart(ListenForData)); 			
 			clientReceiveThread.IsBackground = true; 			
 			clientReceiveThread.Start();  		
@@ -141,9 +143,13 @@ public class TCPTestClient : MonoBehaviour {
 	/// <summary> 	
 	/// Runs in background clientReceiveThread; Listens for incomming data. 	
 	/// </summary>     
-	private void ListenForData() { 		
-		try { 			
-			socketConnection = new TcpClient("192.168.1.10", 8052);    //was localhost		
+	private void ListenForData() {
+        Debug.Log(" Inside ListenForData");
+
+        try
+        { 			
+            //IP Address of the crestron processer.
+			socketConnection = new TcpClient("192.168.1.10", 60000);    //was localhost		
             Byte[] bytes = new Byte[1024];             
 			while (true) { 				
 				// Get a stream object for reading 				
@@ -167,11 +173,14 @@ public class TCPTestClient : MonoBehaviour {
 	/// <summary> 	
 	/// Send message to server using socket connection. 	
 	/// </summary> 	
-	private void SendMessage() {         
-		if (socketConnection == null) {             
-			return;         
-		}  		
-		try { 			
+	private void SendMessage() {
+        Debug.Log(" Inside SendMessage");
+
+        if (socketConnection == null) {
+            Debug.Log(" socketConnection == null");
+            return;
+        }
+        try { 			
 			// Get a stream object for writing. 			
 			NetworkStream stream = socketConnection.GetStream(); 			
 			if (stream.CanWrite) {                 
@@ -190,8 +199,11 @@ public class TCPTestClient : MonoBehaviour {
 
     private void SendMessage2()
     {
+        Debug.Log(" Inside SendMessage2");
+
         if (socketConnection == null)
         {
+            Debug.Log(" socketConnection == null");
             return;
         }
         try

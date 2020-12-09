@@ -22,6 +22,9 @@ public class PlayTimeSlider : MonoBehaviour
 
     public bool isDragging = false;
 
+    public Image PlayIcon;
+    public Image PauseIcon;
+
     //lel shiet how do i do the formatting from seconds to 1:56 ex... 
     //
 
@@ -42,6 +45,16 @@ public class PlayTimeSlider : MonoBehaviour
             virtual_Slider.value += Time.deltaTime;
         }
 
+        if(isPlaying)
+        {
+            PlayIcon.enabled = false;
+            PauseIcon.enabled = true;
+        }
+        else
+        {
+            PlayIcon.enabled = true;
+            PauseIcon.enabled = false;
+        }
     }
 
     public void UpdateRealSlider()
@@ -68,5 +81,10 @@ public class PlayTimeSlider : MonoBehaviour
         isDragging = false;
         //isPlaying = true;
         Debug.Log("Slider released - Real - " + playTime_Slider.value.ToString() + "   Virtual" + virtual_Slider.value.ToString());
+    }
+
+    public void TogglePlay()
+    {
+        isPlaying = !isPlaying;
     }
 }

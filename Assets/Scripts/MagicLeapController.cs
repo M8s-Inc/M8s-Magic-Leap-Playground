@@ -200,6 +200,7 @@ public class MagicLeapController : MonoBehaviour
         }
 
 
+        /*
         //Turning On Hand Colliders (Messy)
         if (m_currentLeftPose == CurrentLeftHandPose.Fist)
         {
@@ -228,7 +229,7 @@ public class MagicLeapController : MonoBehaviour
             m_rightHandCollider.enabled = false;
 
         }
-
+        */
 
     }
 

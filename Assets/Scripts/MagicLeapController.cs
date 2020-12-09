@@ -44,8 +44,18 @@ public class MagicLeapController : MonoBehaviour
     public CurrentLeftHandPose m_currentLeftPose;
     public CurrentRightHandPose m_currentRightPose;
 
+    //Is there a reason I should get the gameobject instead of just the colliders from the start?
+    public GameObject m_leftHandCenter;
+    private Collider m_leftHandCollider;
+    public bool m_leftHandGripping = false; 
+
+    public GameObject m_rightHandCenter;
+    private Collider m_rightHandCollider;
+    public bool m_rightHandGripping = false;
+
+
     //posedirection - I want to be able to get the direction of a pose, like a thumb, for additional input.
-    
+
     //Pretty sure i dont need this.
     //[Tooltip("The reference to the class to handle results from.")]
     public Ray raycast;
@@ -82,6 +92,12 @@ public class MagicLeapController : MonoBehaviour
         MLHandTracking.KeyPoseManager.EnableKeyPoses(m_gestures, true, false); // Enable the hand poses.
 
         EnableRaycast(_raycastHead);
+
+        //Get Hand Center's Colliders.
+        m_leftHandCollider = m_leftHandCenter.GetComponent<Collider>();
+
+        m_rightHandCollider = m_rightHandCenter.GetComponent<Collider>();
+
 
     }
 
@@ -182,6 +198,38 @@ public class MagicLeapController : MonoBehaviour
             Debug.Log("Right hand no hand detected");
             m_currentRightPose = CurrentRightHandPose.None;
         }
+
+
+        //Turning On Hand Colliders (Messy)
+        if (m_currentLeftPose == CurrentLeftHandPose.Fist)
+        {
+            m_leftHandGripping = true;
+            m_leftHandCollider.enabled = true;
+
+        }
+        else
+        {
+            m_leftHandGripping = false;
+            m_leftHandCollider.enabled = false;
+
+        }
+
+
+
+        if (m_currentRightPose == CurrentRightHandPose.Fist)
+        {
+            m_rightHandGripping = true;
+            m_rightHandCollider.enabled = true;
+
+        }
+        else
+        {
+            m_rightHandGripping = false;
+            m_rightHandCollider.enabled = false;
+
+        }
+
+
     }
 
 

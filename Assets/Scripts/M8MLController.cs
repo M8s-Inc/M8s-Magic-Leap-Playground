@@ -13,10 +13,6 @@ public class M8MLController : MonoBehaviour
 
     public LayerMask m_defaultLayer;
     public LayerMask m_UILayer;
-
-    //private Ray ControllerRayCast = new Ray();
-    //private RaycastHit ControllerRayCastHit = new RaycastHit();
-
     public bool devicePlacementActive = true;
 
     public GameObject m_objectPrefab;
@@ -26,8 +22,20 @@ public class M8MLController : MonoBehaviour
     [Space, SerializeField, Tooltip("MLControllerConnectionHandlerBehavior reference.")]
     private MLControllerConnectionHandlerBehavior _controllerConnectionHandler = null;
 
+
+    [Header("Raycast Curve Refs")]
+    public bool rayCastIndicatorOn = false;
     private Ray ControllerRayCast;
     private RaycastHit ControllerRayCastHit;
+
+    public LineRenderer lR;
+
+    public int pointCount = 50;
+    public float bezierHeight = 1.0f;
+
+    public float bezierMinHeight = 5.0f;
+    public float bezierMaxHeight = 3.0f;
+    public float maxLineDistance = 10.0f;
 
     //Placement indicator & variables
     public Transform placementRef;
@@ -42,6 +50,9 @@ public class M8MLController : MonoBehaviour
             enabled = false;
             return;
         }
+
+        lR.enabled = false;
+
 
 #if PLATFORM_LUMIN
         MLInput.OnControllerButtonDown += OnButtonDown;
@@ -71,12 +82,71 @@ public class M8MLController : MonoBehaviour
         ControllerRayCast = new Ray(m_rayCastOrigin.position, m_rayCastOrigin.forward);
         ControllerRayCastHit = new RaycastHit();
 
+
+        if(rayCastIndicatorOn)
+        {
+            if (Physics.Raycast(ControllerRayCast, out ControllerRayCastHit))
+            {
+                Vector3 desiredPosition = ControllerRayCastHit.point;
+                Vector3 vecToDesired = desiredPosition - placementRef.position;
+
+                vecToDesired *= smoothnessFactor;
+                placementRef.position += vecToDesired;
+
+                lR.enabled = true;
+
+                Vector3 startPoint = transform.position;
+                Vector3 endPoint = placementRef.position;
+
+                Vector3 midPoint = ((endPoint - startPoint) / 2f) + startPoint;
+
+                //Diferent methods of doing the line renderer. For now going to make it just a straight line.
+
+                lR.SetPosition(0, startPoint);
+                lR.SetPosition(1, endPoint);
+
+                //Curved
+                //midPoint += Vector3.up * bezierHeight;
+                //midPoint += Vector3.up * Mathf.Lerp(bezierMinHeight, bezierMaxHeight, Mathf.Clamp(Vector3.Distance(startPoint, endPoint),0,1));
+
+                //Curved 2
+                //midPoint += Vector3.up * Mathf.Lerp(bezierMinHeight, bezierMaxHeight, Mathf.Clamp(Vector3.Distance(startPoint, endPoint) / maxLineDistance, 0, 1));
+
+                //for (int i = 0; i < pointCount; i++)
+                //{
+                //    Vector3 lerp1 = Vector3.Lerp(startPoint, midPoint, i / (float)pointCount);
+                //    Vector3 lerp2 = Vector3.Lerp(midPoint, endPoint, i / (float)pointCount);
+
+                //    Vector3 curvePosition = (Vector3.Lerp(lerp1, lerp2, i / (float)pointCount));
+
+                //    lR.SetPosition(i, curvePosition);
+                //}
+                if (ControllerRayCastHit.collider.tag == "Ground")
+                {
+                    lR.startColor = Color.blue;
+                    lR.endColor = Color.cyan;
+                }
+
+                if (ControllerRayCastHit.collider.tag == "Device")
+                {
+                    lR.startColor = Color.green;
+                    lR.endColor = Color.yellow;
+                }
+            }
+            else
+            {
+                Debug.Log("M8ML Controller Line Renderer Off");
+                lR.enabled = false;
+            }
+        }
+        
+
         //if device placement mode is active...
         if (devicePlacementActive)
         {
-            
             if (Physics.Raycast(ControllerRayCast, out ControllerRayCastHit, 100.0f, m_defaultLayer))
             {
+
                 Debug.Log("inside placement ref setting");
                 placementRef.gameObject.SetActive(true);
 
@@ -95,7 +165,10 @@ public class M8MLController : MonoBehaviour
         {
             if (Physics.Raycast(ControllerRayCast, out ControllerRayCastHit, 100.0f, m_UILayer))
             {
-
+                //Cursor to colision point.
+                //Draw Line from start to colision point?
+                //Highlight UI element hovered.
+      
             }
         }
 

@@ -18,6 +18,9 @@ public class PlayTimeSlider : MonoBehaviour
 
     public Slider virtual_Slider;
 
+    public bool isPlaying = true;
+
+    public bool isDragging = false;
 
     //lel shiet how do i do the formatting from seconds to 1:56 ex... 
     //
@@ -34,16 +37,36 @@ public class PlayTimeSlider : MonoBehaviour
         playTime.text = virtual_Slider.value.ToString();
         remainingTime.text = (virtual_Slider.maxValue - virtual_Slider.value).ToString();
 
-        virtual_Slider.value += Time.deltaTime;
+        if(isPlaying && !isDragging)
+        {
+            virtual_Slider.value += Time.deltaTime;
+        }
 
-        //cock sucking fuck Idk how to use this function lol. 
-        //playTime_Slider.OnDrag(playTime_Slider.handleRect);
     }
 
     public void UpdateRealSlider()
     {
         playTime_Slider.value = virtual_Slider.value; 
+    }
 
+    public void UpdateVirtualSlider()
+    {
+        virtual_Slider.value = playTime_Slider.value;
+    }
 
+    public void SliderDragStart()
+    {
+        isDragging = true;
+        isPlaying = false;
+        Debug.Log("Slider Is being dragged");
+        UpdateRealSlider();
+    }
+
+    public void SliderDragEnd()
+    {
+        UpdateVirtualSlider();
+        isDragging = false;
+        //isPlaying = true;
+        Debug.Log("Slider released - Real - " + playTime_Slider.value.ToString() + "   Virtual" + virtual_Slider.value.ToString());
     }
 }

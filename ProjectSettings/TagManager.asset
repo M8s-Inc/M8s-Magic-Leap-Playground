@@ -8,6 +8,8 @@ TagManager:
   - Device
   - Ground
   - Controller
+  - Interactable
+  - Hand
   layers:
   - Default
   - TransparentFX

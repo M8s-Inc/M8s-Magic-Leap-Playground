@@ -135,7 +135,8 @@ public class M8MLController : MonoBehaviour
             }
             else
             {
-                Debug.Log("M8ML Controller Line Renderer Off");
+                //turning off cuse its spamming
+                //Debug.Log("M8ML Controller Line Renderer Off");
                 lR.enabled = false;
             }
         }

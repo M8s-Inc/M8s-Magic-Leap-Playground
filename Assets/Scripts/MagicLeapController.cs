@@ -154,12 +154,14 @@ public class MagicLeapController : MonoBehaviour
         }
         else if (GetGesture(MLHandTracking.Left, MLHandTracking.HandKeyPose.NoPose))
         {
-            Debug.Log("Left hand no pose detected");
+            //turning off cuse its spamming
+            //Debug.Log("Left hand no pose detected");
             m_currentLeftPose = CurrentLeftHandPose.None;
         }
         else if (GetGesture(MLHandTracking.Left, MLHandTracking.HandKeyPose.NoHand))
         {
-            Debug.Log("Left hand no hand detected");
+            //turning off cuse its spamming
+            //Debug.Log("Left hand no hand detected");
             m_currentLeftPose = CurrentLeftHandPose.None;
         }
         //If Right hand
@@ -190,12 +192,14 @@ public class MagicLeapController : MonoBehaviour
         }
         else if (GetGesture(MLHandTracking.Right, MLHandTracking.HandKeyPose.NoPose))
         {
-            Debug.Log("Right hand no pose detected");
+            //turning off cuse its spamming
+            //Debug.Log("Right hand no pose detected");
             m_currentRightPose = CurrentRightHandPose.None;
         }
         else if (GetGesture(MLHandTracking.Right, MLHandTracking.HandKeyPose.NoHand))
         {
-            Debug.Log("Right hand no hand detected");
+            //turning off cuse its spamming
+            //Debug.Log("Right hand no hand detected");
             m_currentRightPose = CurrentRightHandPose.None;
         }
 

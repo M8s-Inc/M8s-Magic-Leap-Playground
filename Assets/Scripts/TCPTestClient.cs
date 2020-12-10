@@ -92,8 +92,7 @@ public class TCPTestClient : MonoBehaviour {
 
     void SliderTask(string message, float value)
     {
-        //Output this to console when the Button2 is clicked
-        Debug.Log(message + "@" + value);
+        Debug.Log("Slider to crestron" + message + "@" + value);
 
         if (socketConnection == null)
         {

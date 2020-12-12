@@ -26,6 +26,10 @@ public class VolumeSlider : MonoBehaviour
     public Image muteIcon;
     public Image unmuteIcon;
 
+    public float sliderValue;
+
+
+
     //lel shiet how do i do the formatting from seconds to 1:56 ex... 
     //
 
@@ -41,7 +45,7 @@ public class VolumeSlider : MonoBehaviour
         currentVolume.text = virtual_Slider.value.ToString();
         
         //was remaining time.
-        maxVolume.text = (virtual_Slider.maxValue - virtual_Slider.value).ToString();
+        //maxVolume.text = (virtual_Slider.maxValue - virtual_Slider.value).ToString();
         
         if (isMuted)
         {
@@ -83,6 +87,8 @@ public class VolumeSlider : MonoBehaviour
         isDragging = false;
         //isPlaying = true;
         Debug.Log("Slider released - Real - " + volume_Slider.value.ToString() + "   Virtual" + virtual_Slider.value.ToString());
+
+        //trigger event to pass value the to TCP/IP Client. 
     }
 
     public void ToggleMute()

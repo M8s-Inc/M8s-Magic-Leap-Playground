@@ -26,6 +26,15 @@ public class CrestronTCPClient_AVData : MonoBehaviour
 
     #endregion
 
+
+    [Serializable]
+    public class LoftAV
+    {
+        public bool powerOn;
+        public float currentVolume;
+        public int currentSource;
+    }
+
     // Use this for initialization 	
     void Start()
     {
@@ -43,6 +52,26 @@ public class CrestronTCPClient_AVData : MonoBehaviour
         //Need to figure out the crestron string parsing shit.
         m_ReceiverVolume_Slider.onValueChanged.AddListener(delegate { SliderTask("LoftAV_Volume_Change", m_ReceiverVolume_Slider.value); });
 
+        LoftAV loftAV = new LoftAV()
+        {
+            powerOn = false,
+            currentVolume = 0.0f,
+            currentSource = 0
+        };
+
+        Debug.Log("LoftAV before JSON - powerOn: " + loftAV.powerOn + " currentVolume: " + loftAV.currentVolume + "  currentSource: " + loftAV.currentSource);
+
+        // json now contains: '{"level":1,"timeElapsed":47.5,"playerName":"Dr Charles Francis"}'
+        string json = JsonUtility.ToJson(loftAV);
+        Debug.Log("LoftAV JSON: " + json);
+
+        string json2 = "{\"powerOn\" : true,\"currentVolume\" : 5.5, \"currentSource\" : 1}";
+        loftAV = JsonUtility.FromJson <LoftAV>(json2);
+        Debug.Log("LoftAV after JSON2 - powerOn: " + loftAV.powerOn + " currentVolume: " + loftAV.currentVolume + "  currentSource: " + loftAV.currentSource);
+
+        string json3 = "{\"powerOn\" : false}";
+        loftAV = JsonUtility.FromJson<LoftAV>(json3);
+        Debug.Log("LoftAV after JSON3 - powerOn: " + loftAV.powerOn + " currentVolume: " + loftAV.currentVolume + "  currentSource: " + loftAV.currentSource);        
     }
     // Update is called once per frame
     void Update()

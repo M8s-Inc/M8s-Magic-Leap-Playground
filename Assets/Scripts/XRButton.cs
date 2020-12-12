@@ -17,6 +17,7 @@ public class XRButton : MonoBehaviour
 
     float currenttime;
 
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -49,15 +50,27 @@ public class XRButton : MonoBehaviour
            
     }
 
+    //private void OnCollisionStay(Collision collision)
+    //{
+    //    ContactPoint
+    //    collision.GetContact(0);
+
+    //}
+
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "Controller")// && Input.GetKey(KeyCode.G))
         {
+            Vector3 collisionPoint;
+            collisionPoint = other.ClosestPoint(end.position);
+            //collisionPoint.position = other.transform.position;
+
             Vector3 heading = (end.position - start.position);
             float magnitudeOfHeading = heading.magnitude;
             heading.Normalize();
 
-            Vector3 startToHand = other.transform.position - start.position;
+            //Vector3 startToHand = other.transform.position - start.position;
+            Vector3 startToHand = collisionPoint - start.position;
             float dotProduct = Vector3.Dot(startToHand, heading);
             dotProduct = Mathf.Clamp(dotProduct, 0f, magnitudeOfHeading);
             Vector3 spot = start.position + heading * dotProduct;

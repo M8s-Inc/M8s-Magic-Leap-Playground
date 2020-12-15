@@ -37,6 +37,7 @@ public class UIManager : MonoBehaviour
                 }
             }
         }
+        UpdateTouchPad();
     }
 
     void StartApp()
@@ -61,7 +62,7 @@ public class UIManager : MonoBehaviour
                 //are these right?
                 if( x < 0.2 && y > 0.2) //top left
                 {
-                    //controllerInput.GetComponent<PlaceObject>().ObjectToPlace = Objects[0];
+                    controllerInput.GetComponent<PlaceObject>().objectToPlace = objects[0];
                     objectsText[0].GetComponent<TextMeshProUGUI>().color = Color.red;
                     objectsText[1].GetComponent<TextMeshProUGUI>().color = Color.white;
                     objectsText[2].GetComponent<TextMeshProUGUI>().color = Color.white;
@@ -70,23 +71,23 @@ public class UIManager : MonoBehaviour
                 }
                 else if (x > 0.2 && y > 0.2)// top right
                 {
-                    //controllerInput.GetComponent<PlaceObject>().ObjectToPlace = Objects[1];
+                    controllerInput.GetComponent<PlaceObject>().objectToPlace = objects[1];
                     objectsText[1].GetComponent<TextMeshProUGUI>().color = Color.red;
                     objectsText[0].GetComponent<TextMeshProUGUI>().color = Color.white;
                     objectsText[2].GetComponent<TextMeshProUGUI>().color = Color.white;
                     objectsText[3].GetComponent<TextMeshProUGUI>().color = Color.white;
                 }
-                else if (x > 0.2 && y <  -0.2)//bottom right
+                else if (x < -0.2 && y < -0.2)//bottom left
                 {
-                    //controllerInput.GetComponent<PlaceObject>().ObjectToPlace = Objects[2];
+                    controllerInput.GetComponent<PlaceObject>().objectToPlace = objects[2];
                     objectsText[2].GetComponent<TextMeshProUGUI>().color = Color.red;
                     objectsText[0].GetComponent<TextMeshProUGUI>().color = Color.white;
                     objectsText[1].GetComponent<TextMeshProUGUI>().color = Color.white;
                     objectsText[3].GetComponent<TextMeshProUGUI>().color = Color.white;
                 }
-                else if (x < -0.2 && y < -0.2)//bottom left
+                else if (x > 0.2 && y < -0.2)//bottom right
                 {
-                    //controllerInput.GetComponent<PlaceObject>().ObjectToPlace = Objects[3];
+                    controllerInput.GetComponent<PlaceObject>().objectToPlace = objects[3];
                     objectsText[3].GetComponent<TextMeshProUGUI>().color = Color.red;
                     objectsText[0].GetComponent<TextMeshProUGUI>().color = Color.white;
                     objectsText[1].GetComponent<TextMeshProUGUI>().color = Color.white;

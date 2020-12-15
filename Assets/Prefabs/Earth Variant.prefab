@@ -1,18 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!135 &8904697364909673090
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7961538460660592742}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.03
-  m_Center: {x: 0, y: 9.313226e-10, z: 0}
 --- !u!54 &414276767999485873
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -29,6 +16,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!135 &8904697364909673090
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7961538460660592742}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.03
+  m_Center: {x: 0, y: 9.313226e-10, z: 0}
 --- !u!1001 &7961538460660627142
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38,7 +38,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100000, guid: 6af1352503c766e44a250466f42e327a, type: 3}
       propertyPath: m_Name
-      value: Earth
+      value: Earth Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6af1352503c766e44a250466f42e327a, type: 3}
+      propertyPath: m_TagString
+      value: Interactable
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6af1352503c766e44a250466f42e327a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -83,6 +87,18 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 6af1352503c766e44a250466f42e327a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 6af1352503c766e44a250466f42e327a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 6af1352503c766e44a250466f42e327a, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 6af1352503c766e44a250466f42e327a, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6af1352503c766e44a250466f42e327a, type: 3}

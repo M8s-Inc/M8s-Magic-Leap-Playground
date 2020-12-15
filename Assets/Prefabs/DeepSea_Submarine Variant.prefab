@@ -38,7 +38,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100000, guid: 122cad41a02cd89478013d35c9fdbf7b, type: 3}
       propertyPath: m_Name
-      value: DeepSea_Submarine
+      value: DeepSea_Submarine Variant
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 122cad41a02cd89478013d35c9fdbf7b, type: 3}
       propertyPath: m_TagString
@@ -87,6 +87,18 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 122cad41a02cd89478013d35c9fdbf7b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 122cad41a02cd89478013d35c9fdbf7b, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 122cad41a02cd89478013d35c9fdbf7b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 122cad41a02cd89478013d35c9fdbf7b, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 122cad41a02cd89478013d35c9fdbf7b, type: 3}

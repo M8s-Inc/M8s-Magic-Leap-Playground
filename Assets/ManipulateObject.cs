@@ -61,7 +61,7 @@ public class ManipulateObject : MonoBehaviour
         }
         if (controller.TriggerValue < 0.2f)
         {
-            Debug.Log("trigger down inside manipulate object: " + controller.TriggerValue);
+            //Debug.Log("trigger down inside manipulate object: " + controller.TriggerValue);
 
             trigger = true;
             if (selectedGameObject != null)

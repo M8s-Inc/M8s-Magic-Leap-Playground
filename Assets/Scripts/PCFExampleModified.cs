@@ -40,6 +40,7 @@ namespace MagicLeap
         #pragma warning restore 414
 
         // Used to keep track of the content that was created or regained during a headpose session.
+        // So.... I should create a dictionary of gameobjects to hold my devices?
         private Dictionary<PersistentBall, string> _persistentContentMap = new Dictionary<PersistentBall, string>();
 
         [SerializeField, Tooltip("Number of frames to perform delete all gesture before executing the deletion.")]
@@ -263,12 +264,18 @@ namespace MagicLeap
 
                 if (pcf != null && MLResult.IsOK(pcf.CurrentResultCode))
                 {
+                    //I need to find a way to decide the _content gameObject based on what object was paired to a specific PCF/CFUID
+                    //Or maybe I can take storedBinding.PrefabType and spawn 
+
                     GameObject gameObj = Instantiate(_content, Vector3.zero, Quaternion.identity);
                     PersistentBall persistentContent = gameObj.GetComponent<PersistentBall>();
                     persistentContent.BallTransformBinding = storedBinding;
                     persistentContent.BallTransformBinding.Bind(pcf, gameObj.transform, true);
+                    
+                    //do i need the contentTap?
                     ContentTap contentTap = persistentContent.GetComponent<ContentTap>();
                     contentTap.OnContentTap += OnContentDestroy;
+
                     ++numPersistentContentRegained;
                     _persistentContentMap.Add(persistentContent, "Regained");
                 }
@@ -299,7 +306,10 @@ namespace MagicLeap
             #if PLATFORM_LUMIN
             MLPersistentCoordinateFrames.FindClosestPCF(position, out MLPersistentCoordinateFrames.PCF pcf);
             PersistentBall persistentContent = gameObj.GetComponent<PersistentBall>();
+
+            //I should be able to change out "ball" with whatever I want to drop in. 
             persistentContent.BallTransformBinding = new TransformBinding(gameObj.GetInstanceID().ToString(), "Ball");
+
             persistentContent.BallTransformBinding.Bind(pcf, gameObj.transform);
             ContentTap contentTap = persistentContent.GetComponent<ContentTap>();
             contentTap.OnContentTap += OnContentDestroy;
@@ -316,6 +326,8 @@ namespace MagicLeap
         {
             #if PLATFORM_LUMIN
             PersistentBall persistentContent = content.GetComponent<PersistentBall>();
+
+            //** how does this get a specific dictionary entry if the key is the same for every entry? Maybe I dont know how dictionaries work.
             if (_persistentContentMap.ContainsKey(persistentContent))
             {
                 string val = _persistentContentMap[persistentContent];

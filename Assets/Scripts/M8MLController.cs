@@ -28,8 +28,10 @@ public class M8MLController : MonoBehaviour
     private Ray ControllerRayCast;
     private RaycastHit ControllerRayCastHit;
 
-    public LineRenderer lR;
 
+
+    //Line Renderer Stuff
+    public LineRenderer lR;
     public int pointCount = 50;
     public float bezierHeight = 1.0f;
 

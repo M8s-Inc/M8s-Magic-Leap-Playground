@@ -13,11 +13,22 @@ public class ManipulateObject : MonoBehaviour
 
     bool trigger;
 
+    //This didnt work.
+    public string nameOfLayer = "Ignore Raycast";
+    LayerMask layer;
+    public int layerToIgnore = 2;
+    int skipLayer;
+
     // Start is called before the first frame update
     void Start()
     {
         MLInput.Start();
         controller = MLInput.GetController(MLInput.Hand.Left);
+
+        skipLayer = ~((1 << layerToIgnore));
+
+        //this method didn't work
+        layer = ~(1 << LayerMask.NameToLayer(nameOfLayer));
 
     }
 
@@ -29,9 +40,15 @@ public class ManipulateObject : MonoBehaviour
             if (trigger == true)
             {
                 RaycastHit hit;
-                if(Physics.Raycast(controller.Position, transform.forward, out hit))
+
+                //Layer didn't work for me here.
+                //if(Physics.Raycast(controller.Position, transform.forward, out hit, layer))
+
+                //why wont this shit work. do i need a fucking max distance?
+                //if (Physics.Raycast(controller.Position, transform.forward, out hit, Mathf.Infinity, skipLayer))
+                if(Physics.Raycast(controller.Position, transform.forward, out hit, Mathf.Infinity, layer))
                 {
-                    if(hit.transform.gameObject.tag == "Interactable")
+                    if (hit.transform.gameObject.tag == "Interactable")
                     {
                         Debug.Log("Interactable hit: " + controller.TriggerValue);
                         selectedGameObject = hit.transform.gameObject;

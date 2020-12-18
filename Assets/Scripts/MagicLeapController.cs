@@ -245,7 +245,11 @@ public class MagicLeapController : MonoBehaviour
 
         //Is there any logic I need to put here to go through and only run if they have this component?
         //should I make the GazeFocus behavior a seperate script that each device also has on its gameObject and just references it?
-        currentFocusedDevice.GetComponent<LightDeviceContoller>().GazeFocusedOnDevice();
+
+        if (currentFocusedDevice.GetComponent<LightDeviceContoller>() != null)
+        {
+            currentFocusedDevice.GetComponent<LightDeviceContoller>().GazeFocusedOnDevice();
+        }
 
         Debug.Log("Device Focused: " + currentFocusedDevice.name);
 
@@ -254,7 +258,10 @@ public class MagicLeapController : MonoBehaviour
     private void ClearFocus()
     {
         //should clear focus off the last focused device...
-        currentFocusedDevice.GetComponent<LightDeviceContoller>().ClearGazeOnDevice();
+        if (currentFocusedDevice.GetComponent<LightDeviceContoller>() != null)
+        {
+            currentFocusedDevice.GetComponent<LightDeviceContoller>().ClearGazeOnDevice();
+        }
         currentFocusedDevice = null;
 
         Debug.Log("Focus Cleared");

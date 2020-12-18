@@ -5,175 +5,188 @@ using UnityEngine;
 using UnityEngine.XR.MagicLeap;
 using MagicLeap.Core;
 using MagicLeap.Core.StarterKit;
+using TMPro;
 
 public class PlaceableDevice : MonoBehaviour
 {
+    public int triggerSubscribeNum = 0;
 
     public LayerMask m_defaultLayer;
 
-    //private Ray placementRay = new Ray();
-    //private RaycastHit placementRayHit = new RaycastHit();
+    public M8MLController myController;
 
-    public bool devicePlacementActive = true;
+    [Header("Device Popup Refs")]
+    public GameObject deviceOptionsPopup;
+    public bool optionsPopupActive = false;
+    public GameObject popupText;
+    public string test;
 
-    public GameObject m_objectPrefab;
-    public Transform m_placedObject;
-    public Transform m_rayCastOrigin;
+    public bool followButtonActive = true;
+    public GameObject followButton;
+    public GameObject unfollowButton;
 
-    [Space, SerializeField, Tooltip("MLControllerConnectionHandlerBehavior reference.")]
-    private MLControllerConnectionHandlerBehavior _controllerConnectionHandler = null;
-
-    private Ray placementRay;
-    private RaycastHit placementRayHit;
-
-    //Placement indicator & variables
-    public Transform placementRef;
-    public float smoothnessFactor = 0.2f;
-    public Vector3 posToMove;
+    public UIManager uiManager;
 
     private void Awake()
     {
-        if (_controllerConnectionHandler == null)
-        {
-            Debug.LogError("Error: RaycastExample._controllerConnectionHandler not set, disabling script.");
-            enabled = false;
-            return;
-        }
 
         #if PLATFORM_LUMIN
-        MLInput.OnControllerButtonDown += OnButtonDown;
-        MLInput.OnTriggerDown += HandleOnTriggerDown;
-
-#endif
+        //MLInput.OnTriggerDown += HandleOnTriggerDown;
+        #endif
     }
 
     void OnDestroy()
     {
-        #if PLATFORM_LUMIN
-        MLInput.OnControllerButtonDown -= OnButtonDown;
-        MLInput.OnTriggerDown -= HandleOnTriggerDown;
-        #endif
+    #if PLATFORM_LUMIN
+        //MLInput.OnTriggerDown -= HandleOnTriggerDown;
+    #endif
     }
 
     // Start is called before the first frame update
     void Start()
     {
-          placementRay = new Ray(m_rayCastOrigin.position, m_rayCastOrigin.forward);
+        popupText.GetComponent<TextMeshProUGUI>().text = this.gameObject.name;
     }
 
-// Update is called once per frame
+    // Update is called once per frame
     void Update()
     {
-        if (devicePlacementActive)
+
+
+    }
+
+    private void ToggleFollowButton()
+    {
+        if(followButtonActive)
         {
-            placementRay = new Ray(m_rayCastOrigin.position, m_rayCastOrigin.forward);
-            placementRayHit = new RaycastHit();
-
-            if (Physics.Raycast(placementRay, out placementRayHit, 100.0f, m_defaultLayer))
-            {
-                Debug.Log("inside placement ref setting");
-                placementRef.gameObject.SetActive(true);
-
-                Vector3 desiredPosition = placementRayHit.point;
-                Vector3 vecToDesired = desiredPosition - placementRef.position;
-
-                vecToDesired *= smoothnessFactor;
-                placementRef.position += vecToDesired;
-
-                posToMove = new Vector3(placementRayHit.point.x, placementRayHit.point.y, placementRayHit.point.z);
-                //StartCoroutine(TeleportWithFade(posToMove));
-                
-            }
-
+            followButton.SetActive(false);
+            unfollowButton.SetActive(true);
+        }
+        else
+        {
+            followButton.SetActive(true);
+            unfollowButton.SetActive(false);
         }
 
+        followButtonActive = !followButtonActive;
+    }
+
+    public void ToggleOptionsPopup()
+    {
+        if (!optionsPopupActive)
+        {
+            OpenOptionsPopup();
+        }
+        else
+        {
+            CloseOptionsPopup();
+        }
+    }
+
+    public void OpenOptionsPopup()
+    {
+        optionsPopupActive = true;
+        deviceOptionsPopup.SetActive(true);
+        //uiManager.otherMenuOpen = true;
+        myController.UnsubscribeTriggerDown();
+        SubscribeTriggerDown();
+    }
+
+    public void CloseOptionsPopup()
+    {
+        optionsPopupActive = false;
+        deviceOptionsPopup.SetActive(false);
+        //uiManager.otherMenuOpen = false;
+        myController.SubscribeTriggerDown();
+        UnsubscribeTriggerDown();
     }
 
     /// <summary>
-    /// Handles the event for button down and cycles the raycast mode.
-    /// </summary>
-    /// <param name="controllerId">The id of the controller.</param>
-    /// <param name="button">The button that is being pressed.</param>
-    private void OnButtonDown(byte controllerId, MLInput.Controller.Button button)
-    {
-        if (_controllerConnectionHandler.IsControllerValid(controllerId) && button == MLInput.Controller.Button.Bumper)
-        {
-            //_raycastMode = (RaycastMode)((int)(_raycastMode + 1) % _modeCount);
-            //UpdateRaycastMode();
-            Debug.Log("Bumper Press");
-            PlaceDevice(posToMove);
-        }
-    }
-
-    /*
-    public void PlaceDevice()
-    {
-        Ray placementRay = new Ray(m_rayCastOrigin.position, m_rayCastOrigin.forward);
-        RaycastHit placementRayHit = new RaycastHit();
-        
-
-        //if (Physics.Raycast(placementRay, 100.0f, m_defaultLayer))
-        if (Physics.Raycast(placementRay, out placementRayHit, 100.0f, m_defaultLayer))
-        {
-            Debug.Log("inside Raycast ");
-
-            if (!m_placedObject)
-            {
-                //returns the transofrm 
-                m_placedObject = Instantiate(m_objectPrefab, placementRayHit.point, Quaternion.identity).transform;
-                Debug.Log("placed object was null");
-
-            }
-            else
-            {
-                m_placedObject.position = placementRayHit.point;
-                Debug.Log("placed object wasnt null");
-
-            }
-        }
-    }
-    */
-    public void PlaceDevice(Vector3 placementPosition)
-    {
-       
-
-        //if (Physics.Raycast(placementRay, 100.0f, m_defaultLayer))
-        if (Physics.Raycast(placementRay, out placementRayHit, 100.0f, m_defaultLayer))
-        {
-            Debug.Log("inside Raycast ");
-
-            if (!m_placedObject)
-            {
-                //returns the transofrm 
-                m_placedObject = Instantiate(m_objectPrefab, placementRayHit.point, Quaternion.identity).transform;
-                Debug.Log("placed object was null");
-
-            }
-            else
-            {
-                m_placedObject.position = placementRayHit.point;
-                Debug.Log("placed object wasnt null");
-
-            }
-        }
-    }
-
-    /// <summary>
-    /// Handles the event for trigger down.
+    /// Handles the event for triggerPushed down.
     /// </summary>
     /// <param name="controller_id">The id of the controller.</param>
-    /// <param name="value">The value of the trigger button.</param>
+    /// <param name="value">The value of the triggerPushed button.</param>
     private void HandleOnTriggerDown(byte controllerId, float value)
     {
-        MLInput.Controller controller = _controllerConnectionHandler.ConnectedController;
-        Debug.Log("inside trigger pressed ");
+        Debug.Log("Inside trigger press in " + this.gameObject.name);
+        Debug.Log(myController.controller.TriggerValue);
 
         #if PLATFORM_LUMIN
-        if (controller != null && controller.Id == controllerId)
+        if (myController.controller != null && myController.controller.Id == controllerId)
         {
             MLInput.Controller.FeedbackIntensity intensity = (MLInput.Controller.FeedbackIntensity)((int)(value * 2.0f));
-            controller.StartFeedbackPatternVibe(MLInput.Controller.FeedbackPatternVibe.Buzz, intensity);
+            myController.controller.StartFeedbackPatternVibe(MLInput.Controller.FeedbackPatternVibe.Buzz, intensity);
         }
         #endif
+
+        if (myController.controller.TriggerValue > 0.5f)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(myController.m_rayCastOrigin.transform.position, myController.m_rayCastOrigin.transform.forward, out hit))
+            {
+                //I think my script was being called multiple times.
+                if (hit.transform.IsChildOf(deviceOptionsPopup.transform))
+                {
+                    //this may be redundant, but I'm doing it to ensure it works when switching between multiple menus. I think the should close other menus but I'll figure that out later.
+                    myController.selectedGameObject = this.gameObject;
+
+                    if (hit.transform.gameObject.name == "Move_Button")
+                    {
+                        //do I need this? or should this already be true before 
+                        Debug.Log("Move button pressed inside " + this.gameObject.name);
+                        myController.devicePlacementActive = true;
+                        CloseOptionsPopup();
+
+                        //snap attach point to device.
+                        //myController.attachPoint.transform.position = this.transform.position;
+
+                        //Snap attachpoint to where the movebutton is pressed - so the raycast matches the attachpoint.
+                        myController.attachPoint.transform.position = hit.transform.position;
+
+                    }
+                    else if (hit.transform.gameObject.name == "Follow_Button")
+                    {
+                        Debug.Log("follow button pressed inside " + this.gameObject.name);
+                        this.gameObject.GetComponent<MagicLeap.PlaceFromCamera>().enabled = true;
+                        CloseOptionsPopup();
+                        ToggleFollowButton();
+                    }
+                    else if (hit.transform.gameObject.name == "Unfollow_Button")
+                    {
+                        Debug.Log("unfollow button pressed inside " + this.gameObject.name);
+                        this.gameObject.GetComponent<MagicLeap.PlaceFromCamera>().enabled = false;
+                        CloseOptionsPopup();
+                        ToggleFollowButton();
+                    }
+                    //do i even need this? I think i'll make do with the controller.
+                    else if (hit.transform.gameObject.name == "Configure_Button")
+                    {
+                        Debug.Log("Device Configure Menu to come");
+                        CloseOptionsPopup();
+                    }
+                    else if (hit.transform.gameObject.name == "Delete_Button")
+                    {
+                        Debug.Log("delete button pressed inside " + this.gameObject.name);
+                        CloseOptionsPopup();
+                        this.gameObject.SetActive(false);
+                    }
+                }
+                
+            }
+        }
+        
     }
+
+    public void SubscribeTriggerDown()
+    {
+        MLInput.OnTriggerDown += HandleOnTriggerDown;
+        triggerSubscribeNum++;
+    }
+
+    public void UnsubscribeTriggerDown()
+    {
+        MLInput.OnTriggerDown -= HandleOnTriggerDown;
+        triggerSubscribeNum--;
+    }
+
 }

@@ -27,7 +27,7 @@ public class ManipulateObject : MonoBehaviour
 
         skipLayer = ~((1 << layerToIgnore));
 
-        //this method didn't work
+        //this method didn't work. JK it was cuse I didn't have max distance.
         layer = ~(1 << LayerMask.NameToLayer(nameOfLayer));
 
     }

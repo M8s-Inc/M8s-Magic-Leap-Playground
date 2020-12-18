@@ -10,28 +10,49 @@ using MagicLeap.Core.StarterKit;
 //This is my Controller Script. I want to use as little of Magic Leap's code as possible, but for the sake of controller interactions I'll use it so i dont have to configure controller settings. 
 public class M8MLController : MonoBehaviour
 {
+    public int triggerSubscribeNum = 0;
+    public int buttonSubscribeNum = 0;
 
     public LayerMask m_defaultLayer;
     public LayerMask m_UILayer;
-    public bool devicePlacementActive = true;
-
-    public GameObject m_objectPrefab;
-    public Transform m_placedObject;
-    public Transform m_rayCastOrigin;
+    public LayerMask m_deviceLayer;
 
     [Space, SerializeField, Tooltip("MLControllerConnectionHandlerBehavior reference.")]
     private MLControllerConnectionHandlerBehavior _controllerConnectionHandler = null;
+    public MLInput.Controller controller;
+
+
+    [Header("Object Placement Refs")]
+    public GameObject m_deviceToPlace;
+    public Transform m_placedObject;
+
+    [Header("Object Manipulation Refs")]
+    public bool devicePlacementActive = false;
+
+    public GameObject selectedGameObject;
+    public GameObject attachPoint;
+    public Transform attachPointDefault;
+
+    bool trigger;
+    //This didnt work.
+    public string nameOfLayer = "Ignore Raycast";
+    LayerMask layer;
+    public int layerToIgnore = 2;
+    int skipLayer;
 
 
     [Header("Raycast Curve Refs")]
+    public Transform m_rayCastOrigin;
     public bool rayCastIndicatorOn = false;
     private Ray ControllerRayCast;
     private RaycastHit ControllerRayCastHit;
 
 
-
     //Line Renderer Stuff
-    public LineRenderer lR;
+    private LineRenderer beamLine;
+    public Color beamStartColor;
+    public Color beamEndColor;
+
     public int pointCount = 50;
     public float bezierHeight = 1.0f;
 
@@ -53,28 +74,58 @@ public class M8MLController : MonoBehaviour
             return;
         }
 
-        lR.enabled = false;
+        beamLine = GetComponent<LineRenderer>();
+
+        beamLine.enabled = false;
 
 
-#if PLATFORM_LUMIN
+        #if PLATFORM_LUMIN
         MLInput.OnControllerButtonDown += OnButtonDown;
         MLInput.OnTriggerDown += HandleOnTriggerDown;
-
+        triggerSubscribeNum++;
+        buttonSubscribeNum++;
 #endif
+
     }
 
     void OnDestroy()
     {
-#if PLATFORM_LUMIN
+        #if PLATFORM_LUMIN
         MLInput.OnControllerButtonDown -= OnButtonDown;
         MLInput.OnTriggerDown -= HandleOnTriggerDown;
-#endif
+
+        triggerSubscribeNum--;
+        buttonSubscribeNum--;
+        #endif
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        ControllerRayCast = new Ray(m_rayCastOrigin.position, m_rayCastOrigin.forward);
+        //this isn't playing nice. idk why this won't work but the next line does.
+        //controller = _controllerConnectionHandler.ConnectedController;
+
+        controller = MLInput.GetController(MLInput.Hand.Left);
+
+        Debug.Log("Controller reference inside M8MLController " + controller.ToString());
+        if (controller == null)
+        {
+            Debug.Log("Controller reference is null");
+        }
+
+        //Line Renderer Stuff
+        //ControllerRayCast = new Ray(m_rayCastOrigin.position, m_rayCastOrigin.forward);
+        beamLine = GetComponent<LineRenderer>();
+        beamLine.startColor = beamStartColor;
+        beamLine.endColor = beamEndColor;
+
+        //Object Manipulation
+        layer = ~(1 << LayerMask.NameToLayer(nameOfLayer));
+
+        //Save Default attachPoint transform for resetting.
+        //attachPointDefault.position = attachPoint.transform.position;
+        //attachPointDefault.rotation = attachPoint.transform.rotation;
+
     }
 
     // Update is called once per frame
@@ -84,10 +135,9 @@ public class M8MLController : MonoBehaviour
         ControllerRayCast = new Ray(m_rayCastOrigin.position, m_rayCastOrigin.forward);
         ControllerRayCastHit = new RaycastHit();
 
-
         if(rayCastIndicatorOn)
         {
-            if (Physics.Raycast(ControllerRayCast, out ControllerRayCastHit))
+            if (Physics.Raycast(ControllerRayCast, out ControllerRayCastHit, 20f))
             {
                 Vector3 desiredPosition = ControllerRayCastHit.point;
                 Vector3 vecToDesired = desiredPosition - placementRef.position;
@@ -95,17 +145,28 @@ public class M8MLController : MonoBehaviour
                 vecToDesired *= smoothnessFactor;
                 placementRef.position += vecToDesired;
 
-                lR.enabled = true;
+                beamLine.enabled = true;
 
-                Vector3 startPoint = transform.position;
+                Vector3 startPoint = m_rayCastOrigin.transform.position;
                 Vector3 endPoint = placementRef.position;
 
                 Vector3 midPoint = ((endPoint - startPoint) / 2f) + startPoint;
 
                 //Diferent methods of doing the line renderer. For now going to make it just a straight line.
 
-                lR.SetPosition(0, startPoint);
-                lR.SetPosition(1, endPoint);
+                beamLine.SetPosition(0, startPoint);
+
+                beamLine.SetPosition(1, endPoint);
+
+                //if (devicePlacementActive)
+                //{
+                //    beamLine.SetPosition(1, attachPoint.transform.position);
+                //}
+                //else
+                //{
+                //    beamLine.SetPosition(1, endPoint);
+                //}
+
 
                 //Curved
                 //midPoint += Vector3.up * bezierHeight;
@@ -121,61 +182,120 @@ public class M8MLController : MonoBehaviour
 
                 //    Vector3 curvePosition = (Vector3.Lerp(lerp1, lerp2, i / (float)pointCount));
 
-                //    lR.SetPosition(i, curvePosition);
+                //    beamLine.SetPosition(i, curvePosition);
                 //}
+
                 if (ControllerRayCastHit.collider.tag == "Ground")
                 {
-                    lR.startColor = Color.blue;
-                    lR.endColor = Color.cyan;
+                    beamLine.startColor = Color.blue;
+                    beamLine.endColor = Color.cyan;
                 }
-
-                if (ControllerRayCastHit.collider.tag == "Device")
+                else if (ControllerRayCastHit.collider.tag == "Device")
                 {
-                    lR.startColor = Color.green;
-                    lR.endColor = Color.yellow;
+                    beamLine.startColor = Color.green;
+                    beamLine.endColor = Color.yellow;
+                }
+                else
+                {
+                    beamLine.startColor = beamStartColor;
+                    beamLine.endColor = beamEndColor;
                 }
             }
             else
             {
                 //turning off cuse its spamming
                 //Debug.Log("M8ML Controller Line Renderer Off");
-                lR.enabled = false;
+
+                //beamLine.enabled = false;
+                Debug.Log("Controller Raycast not hitting?");
+                beamLine.SetPosition(0, transform.position);
+                beamLine.SetPosition(1, transform.forward * 3);
             }
         }
         
 
-        //if device placement mode is active...
-        if (devicePlacementActive)
+        
+        ////if device placement mode is active...
+        //if (devicePlacementActive)
+        //{
+        //    if (Physics.Raycast(ControllerRayCast, out ControllerRayCastHit, 100.0f, m_defaultLayer))
+        //    {
+
+        //        Debug.Log("inside placement ref setting");
+        //        placementRef.gameObject.SetActive(true);
+
+        //        Vector3 desiredPosition = ControllerRayCastHit.point;
+        //        Vector3 vecToDesired = desiredPosition - placementRef.position;
+
+        //        vecToDesired *= smoothnessFactor;
+        //        placementRef.position += vecToDesired;
+
+        //        posToMove = new Vector3(ControllerRayCastHit.point.x, ControllerRayCastHit.point.y, ControllerRayCastHit.point.z);
+        //        //StartCoroutine(TeleportWithFade(posToMove));
+
+        //    }
+        //}
+
+        if(devicePlacementActive )
         {
-            if (Physics.Raycast(ControllerRayCast, out ControllerRayCastHit, 100.0f, m_defaultLayer))
-            {
-
-                Debug.Log("inside placement ref setting");
-                placementRef.gameObject.SetActive(true);
-
-                Vector3 desiredPosition = ControllerRayCastHit.point;
-                Vector3 vecToDesired = desiredPosition - placementRef.position;
-
-                vecToDesired *= smoothnessFactor;
-                placementRef.position += vecToDesired;
-
-                posToMove = new Vector3(ControllerRayCastHit.point.x, ControllerRayCastHit.point.y, ControllerRayCastHit.point.z);
-                //StartCoroutine(TeleportWithFade(posToMove));
-
-            }
+            ManipulateDevice();
         }
-        else //UI interactions enabled?
-        {
-            if (Physics.Raycast(ControllerRayCast, out ControllerRayCastHit, 100.0f, m_UILayer))
-            {
-                //Cursor to colision point.
-                //Draw Line from start to colision point?
-                //Highlight UI element hovered.
-      
-            }
-        }
+
 
     }
+
+    public void PlaceDevice(Vector3 placementPosition)
+    {
+
+        //if (Physics.Raycast(ControllerRayCast, 100.0f, m_defaultLayer))
+        if (Physics.Raycast(ControllerRayCast, out ControllerRayCastHit, 100.0f, m_defaultLayer))
+        {
+            Debug.Log("inside Raycast ");
+
+            if (!m_placedObject)
+            {
+                //returns the transofrm 
+                m_placedObject = Instantiate(m_deviceToPlace, ControllerRayCastHit.point, Quaternion.identity).transform;
+                Debug.Log("placed object was null");
+            }
+            else
+            {
+                m_placedObject.position = ControllerRayCastHit.point;
+                Debug.Log("Object Placed, Clearing m_deviceToPlace");
+                m_deviceToPlace = null;
+            }
+        }
+    }
+
+    void ManipulateDevice()
+    {
+        //Rotate to orientation of controller.
+        //selectedGameObject.transform.rotation = gameObject.transform.rotation;
+        selectedGameObject.transform.rotation = Quaternion.Slerp(selectedGameObject.transform.rotation, attachPoint.transform.rotation, 0.1f);
+        selectedGameObject.transform.position = attachPoint.transform.position;
+
+        if (controller.Touch1Active)
+        {
+            float x = controller.Touch1PosAndForce.x;
+            float y = controller.Touch1PosAndForce.y;
+            float force = controller.Touch1PosAndForce.z;
+
+            if (force > 0)
+            {
+                if (x > 0.5 || x < -0.5)
+                {
+                    selectedGameObject.transform.localScale += selectedGameObject.transform.localScale * x * Time.deltaTime;
+                }
+
+                if (y > 0.3 || y < -0.3)
+                {
+                    attachPoint.transform.position = Vector3.MoveTowards(attachPoint.transform.position, gameObject.transform.position, -y * Time.deltaTime);
+                }
+                Debug.Log(" Inside ManipulateDevice : X " + x + "  y " + y + "  force " + force);
+            }
+        }
+    }
+
 
     /// <summary>
     /// Handles the event for button down and cycles the raycast mode.
@@ -191,64 +311,38 @@ public class M8MLController : MonoBehaviour
             Debug.Log("Bumper Press");
             if (devicePlacementActive)
             {
-                PlaceDevice(posToMove);
+                //actually dont think I want this to be called here anyway...
+                //PlaceDevice(posToMove);
+                //devicePlacementActive = false;
+            }
+            else //if not actively placing device
+            {
+                Debug.Log("MyController inside else Bumper Press");
+
+                //cast a ray, if it hits a device, open that object's popup menu
+                if (Physics.Raycast(ControllerRayCast, out ControllerRayCastHit, 100.0f, m_deviceLayer))
+                {
+                    //close any menu that may be open before selecting new device.
+                    //if(selectedGameObject!=null)
+                    //{
+                    //    selectedGameObject.GetComponent<PlaceableDevice>().CloseOptionsPopup();
+                    //}
+
+                    selectedGameObject = ControllerRayCastHit.transform.gameObject;
+                    selectedGameObject.GetComponent<PlaceableDevice>().ToggleOptionsPopup();
+
+                }
             }
         }
-    }
 
-    /*
-    public void PlaceDevice()
-    {
-        Ray ControllerRayCast = new Ray(m_rayCastOrigin.position, m_rayCastOrigin.forward);
-        RaycastHit ControllerRayCastHit = new RaycastHit();
-        
-
-        //if (Physics.Raycast(ControllerRayCast, 100.0f, m_defaultLayer))
-        if (Physics.Raycast(ControllerRayCast, out ControllerRayCastHit, 100.0f, m_defaultLayer))
+        if (selectedGameObject != null && _controllerConnectionHandler.IsControllerValid(controllerId) && button == MLInput.Controller.Button.HomeTap)
         {
-            Debug.Log("inside Raycast ");
-
-            if (!m_placedObject)
+            if (selectedGameObject.GetComponent<PlaceableDevice>().optionsPopupActive)
             {
-                //returns the transofrm 
-                m_placedObject = Instantiate(m_objectPrefab, ControllerRayCastHit.point, Quaternion.identity).transform;
-                Debug.Log("placed object was null");
-
-            }
-            else
-            {
-                m_placedObject.position = ControllerRayCastHit.point;
-                Debug.Log("placed object wasnt null");
-
+                selectedGameObject.GetComponent<PlaceableDevice>().CloseOptionsPopup();
             }
         }
     }
-    */
-    public void PlaceDevice(Vector3 placementPosition)
-    {
-
-
-        //if (Physics.Raycast(ControllerRayCast, 100.0f, m_defaultLayer))
-        if (Physics.Raycast(ControllerRayCast, out ControllerRayCastHit, 100.0f, m_defaultLayer))
-        {
-            Debug.Log("inside Raycast ");
-
-            if (!m_placedObject)
-            {
-                //returns the transofrm 
-                m_placedObject = Instantiate(m_objectPrefab, ControllerRayCastHit.point, Quaternion.identity).transform;
-                Debug.Log("placed object was null");
-
-            }
-            else
-            {
-                m_placedObject.position = ControllerRayCastHit.point;
-                Debug.Log("placed object wasnt null");
-
-            }
-        }
-    }
-
     /// <summary>
     /// Handles the event for trigger down.
     /// </summary>
@@ -256,15 +350,80 @@ public class M8MLController : MonoBehaviour
     /// <param name="value">The value of the trigger button.</param>
     private void HandleOnTriggerDown(byte controllerId, float value)
     {
-        MLInput.Controller controller = _controllerConnectionHandler.ConnectedController;
-        Debug.Log("inside trigger pressed ");
+        Debug.Log("inside trigger pressed in " + this.gameObject.name);
 
-#if PLATFORM_LUMIN
+        #if PLATFORM_LUMIN
         if (controller != null && controller.Id == controllerId)
         {
             MLInput.Controller.FeedbackIntensity intensity = (MLInput.Controller.FeedbackIntensity)((int)(value * 2.0f));
             controller.StartFeedbackPatternVibe(MLInput.Controller.FeedbackPatternVibe.Buzz, intensity);
         }
-#endif
+        #endif
+
+        if (controller.TriggerValue > 0.8f && devicePlacementActive)
+        {
+            //actually dont think I want this to be called here anyway...
+            //PlaceDevice(posToMove);
+            Debug.Log("inside triggerdown device placement");
+            devicePlacementActive = false;
+
+            //this isn't working
+            attachPoint.transform.position = attachPointDefault.position;
+            attachPoint.transform.rotation = attachPointDefault.rotation;
+
+
+        }
+
+        /*
+        //For ManipulateDevice (I need to create a popup menu first).
+        if (controller.TriggerValue > 0.8f)
+        {
+            Debug.Log("trigger down inside manipulate object: " + controller.TriggerValue);
+            if (trigger == true)
+            {
+                RaycastHit hit;
+
+                //Layer didn't work for me here.
+                //if(Physics.Raycast(controller.Position, transform.forward, out hit, layer))
+
+                //why wont this shit work. do i need a fucking max distance?
+                //if (Physics.Raycast(controller.Position, transform.forward, out hit, Mathf.Infinity, skipLayer))
+                if (Physics.Raycast(controller.Position, transform.forward, out hit, Mathf.Infinity, layer))
+                {
+                    if (hit.transform.gameObject.tag == "Interactable")
+                    {
+                        Debug.Log("Interactable hit: " + controller.TriggerValue);
+                        selectedGameObject = hit.transform.gameObject;
+                        selectedGameObject.GetComponent<Rigidbody>().useGravity = false;
+                        attachPoint.transform.position = hit.transform.position;
+                    }
+                }
+                trigger = false;
+            }
+        }
+        if (controller.TriggerValue < 0.2f)
+        {
+            //Debug.Log("trigger down inside manipulate object: " + controller.TriggerValue);
+
+            trigger = true;
+            if (selectedGameObject != null)
+            {
+                selectedGameObject.GetComponent<Rigidbody>().useGravity = true;
+                selectedGameObject = null;
+            }
+        }
+        */
+    }
+
+    public void SubscribeTriggerDown()
+    {
+        MLInput.OnTriggerDown += HandleOnTriggerDown;
+        triggerSubscribeNum++;
+    }
+
+    public void UnsubscribeTriggerDown()
+    {
+        MLInput.OnTriggerDown -= HandleOnTriggerDown;
+        triggerSubscribeNum--;
     }
 }

@@ -34,6 +34,8 @@ public class UIManager : MonoBehaviour
 
     public bool triggerPushed;
 
+    public bool otherMenuOpen = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -99,7 +101,7 @@ public class UIManager : MonoBehaviour
             //}
         }
 
-        if (button == MLInput.Controller.Button.HomeTap)
+        if (button == MLInput.Controller.Button.HomeTap && !otherMenuOpen)
         {
 
             //if (currentMenuPage == mainMenuCanvas)
@@ -132,8 +134,6 @@ public class UIManager : MonoBehaviour
                 OpenPreviousPage();
             }
            
-
-
         }
     }
 

@@ -156,16 +156,16 @@ public class M8MLController : MonoBehaviour
 
                 beamLine.SetPosition(0, startPoint);
 
-                beamLine.SetPosition(1, endPoint);
+                //beamLine.SetPosition(1, endPoint);
 
-                //if (devicePlacementActive)
-                //{
-                //    beamLine.SetPosition(1, attachPoint.transform.position);
-                //}
-                //else
-                //{
-                //    beamLine.SetPosition(1, endPoint);
-                //}
+                if (devicePlacementActive)
+                {
+                    beamLine.SetPosition(1, attachPoint.transform.position);
+                }
+                else
+                {
+                    beamLine.SetPosition(1, endPoint);
+                }
 
 
                 //Curved
@@ -209,7 +209,15 @@ public class M8MLController : MonoBehaviour
                 //beamLine.enabled = false;
                 Debug.Log("Controller Raycast not hitting?");
                 beamLine.SetPosition(0, transform.position);
-                beamLine.SetPosition(1, transform.forward * 3);
+
+                if (devicePlacementActive)
+                {
+                    beamLine.SetPosition(1, attachPoint.transform.position);
+                }
+                else
+                {
+                    beamLine.SetPosition(1, transform.forward * 3);
+                }
             }
         }
         

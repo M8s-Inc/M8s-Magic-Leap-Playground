@@ -1,18 +1,10 @@
-﻿// %BANNER_BEGIN%
-// ---------------------------------------------------------------------
-// %COPYRIGHT_BEGIN%
-//
-// Copyright (c) 2019-present, Magic Leap, Inc. All Rights Reserved.
-// Use of this file is governed by the Developer Agreement, located
-// here: https://auth.magicleap.com/terms/developer
-//
-// %COPYRIGHT_END%
-// ---------------------------------------------------------------------
-// %BANNER_END%
-
-using MagicLeap.Core;
+﻿using MagicLeap.Core;
 using UnityEngine;
 using UnityEngine.XR.MagicLeap;
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace MagicLeap
 {
@@ -22,8 +14,11 @@ namespace MagicLeap
     /// and displays which PCF this content is bound to.
     /// </summary>
     [RequireComponent(typeof(Collider), typeof(ContentTap))]
+    
     public class PersistentDevice : MonoBehaviour
     {
+        //Sort of starting from scratch here. I need to move some of the tab and drag handlers for movement. I'll pass that to PlaceableDevice Script.     
+
         #if PLATFORM_LUMIN
         public TransformBinding BallTransformBinding = null;
         #endif
@@ -48,6 +43,7 @@ namespace MagicLeap
         /// <summary>
         /// Validates parameters, initializes renderers, and listens to events.
         /// </summary>
+        /// 
         void Start()
         {
             if (_destroyedContentEffect == null)

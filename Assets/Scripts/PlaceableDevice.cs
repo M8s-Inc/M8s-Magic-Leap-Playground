@@ -142,6 +142,7 @@ public class PlaceableDevice : MonoBehaviour
 
                         //Snap attachpoint to where the movebutton is pressed - so the raycast matches the attachpoint.
                         myController.attachPoint.transform.position = hit.transform.position;
+                        this.transform.position = myController.attachPoint.transform.position;
 
                     }
                     else if (hit.transform.gameObject.name == "Follow_Button")

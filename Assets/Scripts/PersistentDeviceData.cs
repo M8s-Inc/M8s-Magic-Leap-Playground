@@ -3,6 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+#if PLATFORM_LUMIN
+using UnityEngine.XR.MagicLeap.Native;
+#endif
+using UnityEngine.XR.MagicLeap;
+
+
 public class PersistentDeviceData : IComparable<PersistentDeviceData>
 {
 
@@ -28,17 +35,5 @@ public class PersistentDeviceData : IComparable<PersistentDeviceData>
             return 1;
         }
         return CFUID2 - other.CFUID2;
-    }
-
-        // Start is called before the first frame update
-        void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

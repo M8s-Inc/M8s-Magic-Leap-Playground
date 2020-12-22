@@ -20,7 +20,7 @@ namespace MagicLeap
         //Sort of starting from scratch here. I need to move some of the tab and drag handlers for movement. I'll pass that to PlaceableDevice Script.     
 
         #if PLATFORM_LUMIN
-        public TransformBinding BallTransformBinding = null;
+        public TransformBinding DeviceTransformBinding = null;
         #endif
 
         [SerializeField, Tooltip("Destroyed content effect.")]
@@ -157,7 +157,7 @@ namespace MagicLeap
         {
             Instantiate(_destroyedContentEffect, transform.position, Quaternion.identity);
             #if PLATFORM_LUMIN
-            BallTransformBinding.UnBind();
+            DeviceTransformBinding.UnBind();
             #endif
             Destroy(gameObject);
         }
@@ -170,10 +170,10 @@ namespace MagicLeap
             _highlightEffect.SetActive(true);
 
 #           if PLATFORM_LUMIN
-            if (BallTransformBinding?.PCF != null && BallTransformBinding.PCF.CurrentResultCode == MLResult.Code.Ok)
+            if (DeviceTransformBinding?.PCF != null && DeviceTransformBinding.PCF.CurrentResultCode == MLResult.Code.Ok)
             {
                 _lineToPCF.SetPosition(0, transform.position);
-                _lineToPCF.SetPosition(1, BallTransformBinding.PCF.Position);
+                _lineToPCF.SetPosition(1, DeviceTransformBinding.PCF.Position);
                 _lineToPCF.enabled = PCFVisualizer.IsVisualizing;
             }
             #endif
@@ -217,7 +217,7 @@ namespace MagicLeap
             #if PLATFORM_LUMIN
             if (MLPersistentCoordinateFrames.IsLocalized)
             {
-                BallTransformBinding.Update();
+                DeviceTransformBinding.Update();
             }
             #endif
         }

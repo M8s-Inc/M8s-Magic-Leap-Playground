@@ -267,6 +267,9 @@ namespace MagicLeap
                     //I need to find a way to decide the _content gameObject based on what object was paired to a specific PCF/CFUID
                     //Or maybe I can take storedBinding.PrefabType and spawn 
 
+                    Debug.Log("Stored Binding ID: " + storedBinding.Id);
+                    Debug.Log("Stored Binding prefab type: " + storedBinding.PrefabType);
+
                     GameObject gameObj = Instantiate(_content, Vector3.zero, Quaternion.identity);
                     PersistentBall persistentContent = gameObj.GetComponent<PersistentBall>();
                     persistentContent.BallTransformBinding = storedBinding;

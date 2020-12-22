@@ -7,9 +7,9 @@ public class PersistentDeviceList : MonoBehaviour
 {
     List<PersistentDeviceData> PersistentDevicesDataList = new List<PersistentDeviceData>();
 
+Dictionary<string, PersistentDeviceData> persistentDevices = new Dictionary<string, PersistentDeviceData>();
 
 
-    Dictionary<string, PersistentDeviceData> persistentDevices = new Dictionary<string, PersistentDeviceData>();
     // Start is called before the first frame update
     void Start()
     {

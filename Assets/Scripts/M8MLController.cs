@@ -252,6 +252,8 @@ public class M8MLController : MonoBehaviour
 
     }
 
+
+
     public void PlaceDevice(Vector3 placementPosition)
     {
 
@@ -375,7 +377,11 @@ public class M8MLController : MonoBehaviour
             Debug.Log("inside triggerdown device placement");
             devicePlacementActive = false;
 
-            //this isn't working
+            //Update the PCF Binding.
+            selectedGameObject.GetComponent<MagicLeap.PersistentDevice>().DeviceTransformBinding.Update();
+            //DeviceTransformBinding.Update();
+
+            //this isn't working - now it does.
             attachPoint.transform.position = attachPointDefault.position;
             attachPoint.transform.rotation = attachPointDefault.rotation;
 

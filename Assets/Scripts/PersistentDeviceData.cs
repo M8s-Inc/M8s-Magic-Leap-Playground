@@ -10,22 +10,28 @@ using UnityEngine.XR.MagicLeap.Native;
 using UnityEngine.XR.MagicLeap;
 
 
+[Serializable]
 public class PersistentDeviceData : IComparable<PersistentDeviceData>
 {
 
-    public string deviceName;
-    public string CFUID;
-    public string otherInputs;
 
-    public int CFUID2;
+    public string id;
+    public string deviceName;
+    public string prefabType;
+
+    public string ipAddress;
+
+    //public string CFUID;
+    //public string otherInputs;
+    public int sortID;
 
     //need to save transform info too.
 
-    public PersistentDeviceData(string newDeviceName, string newCFUID, string newOtherInputs)
+    public PersistentDeviceData(string newid, string newDeviceName, string newPrefabType)
     {
         deviceName = newDeviceName;
-        CFUID = newCFUID;
-        otherInputs = newOtherInputs;
+        id = newid;
+        prefabType = newPrefabType;
     }
 
     public int CompareTo(PersistentDeviceData other)
@@ -34,6 +40,6 @@ public class PersistentDeviceData : IComparable<PersistentDeviceData>
         {
             return 1;
         }
-        return CFUID2 - other.CFUID2;
+        return sortID - other.sortID;
     }
 }

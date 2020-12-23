@@ -16,13 +16,23 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
+    public MagicLeap.MyPCF myPCF;
+
+    public DeviceManager deviceManger;
 
     private MLInput.Controller controller;
-    public GameObject controllerInput;
+
+    public M8MLController myController;
 
     public GameObject mainMenuCanvas;
     public GameObject settingsCanvas;
     public GameObject addDeviceCanvas;
+
+    //Add Device Menus & prefab list.
+    public GameObject addDevice_LightCanvas;
+    public GameObject addDevice_TVCanvas;
+
+    
 
     //public GameObject[] objects;
     //public GameObject[] objectsText;
@@ -62,8 +72,13 @@ public class UIManager : MonoBehaviour
         if (controller.TriggerValue > 0.5f && !triggerPushed)
         {
             RaycastHit hit;
-            if (Physics.Raycast(controllerInput.transform.position, controllerInput.transform.forward, out hit))
+            if (Physics.Raycast(myController.m_rayCastOrigin.transform.position, myController.m_rayCastOrigin.transform.forward, out hit))
             {
+                if (hit.transform.gameObject.name == "PreviousMenu_Button")
+                {
+                    OpenPreviousPage();
+                    triggerPushed = true;
+                }
                 if (hit.transform.gameObject.name == "SettingsMenu_Button")
                 {
                     OpenPage(settingsCanvas);
@@ -74,12 +89,45 @@ public class UIManager : MonoBehaviour
                     OpenPage(addDeviceCanvas);
                     triggerPushed = true;
                 }
-                //do i even need this? I think i'll make do with the controller.
-                else if (hit.transform.gameObject.name == "PreviousMenu_Button")
+                else if (hit.transform.gameObject.name == "Light_Button")
                 {
-                    OpenPreviousPage();
+                    OpenPage(addDevice_LightCanvas);
+                    triggerPushed = true; ;
+                }
+                else if (hit.transform.gameObject.name == "TV_Button")
+                {
+                    OpenPage(addDevice_TVCanvas);
+                    triggerPushed = true;
+                }//Add Device Lights
+                else if (hit.transform.gameObject.name == "PubnubLight_Button")
+                {
+                    ClearMenu();
+                    triggerPushed = true;
+                    deviceManger.AddDevice("Pubnub_Light", "192.168.0.x");
+                }
+                else if (hit.transform.gameObject.name == "CrestronLight_Button")
+                {
+                    //OpenPage(addDevice_TVCanvas);
+                    ClearMenu();
                     triggerPushed = true;
                 }
+                else if (hit.transform.gameObject.name == "CrestronAppleTV_Button")
+                {
+                    ClearMenu();
+                    triggerPushed = true;
+                    deviceManger.AddDevice("Crestron_AppleTV", "192.168.0.x");
+                }
+                else if (hit.transform.gameObject.name == "DeleteAll_Button")
+                {
+                    Debug.Log("Delete Device Data & PCFs");
+                    ClearMenu();
+                    triggerPushed = true;
+                    deviceManger.DeleteDevices();
+                    myPCF.DeletePCFData();
+
+                }
+                //do i even need this? I think i'll make do with the controller.
+
             }
         }
         if (controller.TriggerValue < 0.2f)
@@ -135,6 +183,17 @@ public class UIManager : MonoBehaviour
             }
            
         }
+    }
+
+    void ClearMenu()
+    {
+
+        currentMenuPage.SetActive(false);
+        currentMenuPage = null;
+        previousMenuPage = null;
+
+        menuClosed = true;
+
     }
 
     void OpenPreviousPage()

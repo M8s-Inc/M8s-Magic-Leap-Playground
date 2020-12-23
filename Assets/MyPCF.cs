@@ -1,4 +1,4 @@
-// %BANNER_BEGIN%
+﻿// %BANNER_BEGIN%
 // ---------------------------------------------------------------------
 // %COPYRIGHT_BEGIN%
 //
@@ -23,8 +23,11 @@ namespace MagicLeap
     /// Demonstrates how to persist objects dynamically by interfacing with
     /// the MLPersistence.PersistentCoordinateFramesCoordinateFrames API and the BindingsLocalStorage class.
     /// </summary>
-    public class PCFExampleModified : MonoBehaviour
+    public class MyPCF : MonoBehaviour
     {
+        public DeviceManager deviceManager;
+        public M8MLController myController; 
+
         [SerializeField, Tooltip("Persistent Content to create.")]
         private GameObject _content = null;
 
@@ -41,7 +44,9 @@ namespace MagicLeap
 
         // Used to keep track of the content that was created or regained during a headpose session.
         // So.... I should create a dictionary of gameobjects to hold my devices?
-        private Dictionary<PersistentBall, string> _persistentContentMap = new Dictionary<PersistentBall, string>();
+        private Dictionary<PersistentDevice, string> _persistentContentMap = new Dictionary<PersistentDevice, string>();
+
+        //public Dictionary<string, GameObject> deviceDictionary = new Dictionary<string, GameObject>();
 
         [SerializeField, Tooltip("Number of frames to perform delete all gesture before executing the deletion.")]
         private int _deleteAllSequenceMinFrames = 60;
@@ -96,12 +101,12 @@ namespace MagicLeap
         /// </summary>
         void Awake()
         {
-            if (_content == null || _content.GetComponent<PersistentBall>() == null)
-            {
-                Debug.LogError("Error: PCFExample._content is not set or is missing PersistentBall behavior, disabling script.");
-                enabled = false;
-                return;
-            }
+            //if (_content == null || _content.GetComponent<PersistentDevice>() == null)
+            //{
+            //    Debug.LogError("Error: PCFExample._content is not set or is missing PersistentDevice behavior, disabling script.");
+            //    enabled = false;
+            //    return;
+            //}
 
             if (_controller == null)
             {
@@ -123,7 +128,7 @@ namespace MagicLeap
         /// </summary>
         void Start()
         {
-            #if PLATFORM_LUMIN
+#if PLATFORM_LUMIN
             MLResult result = MLPersistentCoordinateFrames.Start();
             if (!result.IsOk)
             {
@@ -139,7 +144,7 @@ namespace MagicLeap
             MLInput.OnControllerTouchpadGestureStart += HandleTouchpadGestureStart;
             MLInput.OnControllerTouchpadGestureContinue += HandleTouchpadGestureContinue;
             MLInput.OnControllerTouchpadGestureEnd += HandleTouchpadGestureEnd;
-            #endif
+#endif
         }
 
         /// <summary>
@@ -165,13 +170,13 @@ namespace MagicLeap
                 LocalizeManager.GetString("Status"),
                 LocalizeManager.GetString(ControllerStatus.Text));
 
-            #if PLATFORM_LUMIN
+#if PLATFORM_LUMIN
             _statusText.text += string.Format("<color=#dbfb76><b>{0}</b></color>\n{1}: {2}\n{3}\n",
                 LocalizeManager.GetString("ExampleData"),
                 LocalizeManager.GetString("Status"),
                 LocalizeManager.GetString(MLPersistentCoordinateFrames.IsLocalized ? "LocalizedToMap" : "NotLocalizedToMap"),
                 LocalizeManager.GetString(exampleStatus));
-            #endif
+#endif
 
             _statusText.text += string.Format("{0}: {1}\n", LocalizeManager.GetString("RegainedContent"), numPersistentContentRegained);
 
@@ -191,7 +196,7 @@ namespace MagicLeap
         /// </summary>
         void OnDestroy()
         {
-            #if PLATFORM_LUMIN
+#if PLATFORM_LUMIN
             PCFVisualizer.OnFindAllPCFs -= HandleOnFindAllPCFs;
             MLPersistentCoordinateFrames.OnLocalized -= HandleOnLocalized;
             MLPersistentCoordinateFrames.Stop();
@@ -200,7 +205,7 @@ namespace MagicLeap
             MLInput.OnControllerTouchpadGestureStart -= HandleTouchpadGestureStart;
             MLInput.OnControllerTouchpadGestureContinue -= HandleTouchpadGestureContinue;
             MLInput.OnControllerTouchpadGestureEnd -= HandleTouchpadGestureEnd;
-            #endif
+#endif
         }
 
         /// <summary>
@@ -210,15 +215,15 @@ namespace MagicLeap
         /// <param name="localized"> Map Events that happened. </param>
         private void HandleOnLocalized(bool localized)
         {
-            #if PLATFORM_LUMIN
+#if PLATFORM_LUMIN
             if (localized)
             {
                 if (bindingsLoaded)
                 {
                     if (_persistentContentMap.Count > 0)
                     {
-                        List<PersistentBall> keys = new List<PersistentBall>(_persistentContentMap.Keys);
-                        foreach (PersistentBall persistentContent in keys)
+                        List<PersistentDevice> keys = new List<PersistentDevice>(_persistentContentMap.Keys);
+                        foreach (PersistentDevice persistentContent in keys)
                         {
                             _persistentContentMap[persistentContent] = "Regained";
                             ++numPersistentContentRegained;
@@ -239,7 +244,7 @@ namespace MagicLeap
                 numSingleUserMultiSessionPCFs = 0;
                 numMultiUserMultiSessionPCFs = 0;
             }
-            #endif
+#endif
         }
 
         /// <summary>
@@ -257,6 +262,22 @@ namespace MagicLeap
 
             List<TransformBinding> deleteBindings = new List<TransformBinding>();
 
+            int devices = 0;
+            //Testing to make sure this dictionary has shit.
+            Debug.Log("Testing deviceDictionary inside MyPCF");
+            foreach (var device in deviceManager.deviceDictionary)
+            {
+                devices++;
+                Debug.Log("device name: " + device.Value.name + "  prefab type: " + device.Value.GetComponent<MagicLeap.PersistentDevice>().deviceData.prefabType + "  ID : " + device.Value.GetComponent<MagicLeap.PersistentDevice>().deviceData.id);
+            }
+
+            //Idk if this is where this should go but lets see. 
+            //if (deviceManager.deviceDictionary != null)
+            if (devices>0)
+            {
+                
+            }
+
             foreach (TransformBinding storedBinding in allBindings)
             {
                 // Try to find the PCF with the stored CFUID.
@@ -264,23 +285,39 @@ namespace MagicLeap
 
                 if (pcf != null && MLResult.IsOK(pcf.CurrentResultCode))
                 {
-                    //I need to find a way to decide the _content gameObject based on what object was paired to a specific PCF/CFUID
-                    //Or maybe I can take storedBinding.PrefabType and spawn 
-
                     Debug.Log("Stored Binding ID: " + storedBinding.Id);
                     Debug.Log("Stored Binding prefab type: " + storedBinding.PrefabType);
 
-                    GameObject gameObj = Instantiate(_content, Vector3.zero, Quaternion.identity);
-                    PersistentBall persistentContent = gameObj.GetComponent<PersistentBall>();
-                    persistentContent.BallTransformBinding = storedBinding;
-                    persistentContent.BallTransformBinding.Bind(pcf, gameObj.transform, true);
-                    
-                    //do i need the contentTap?
-                    ContentTap contentTap = persistentContent.GetComponent<ContentTap>();
-                    contentTap.OnContentTap += OnContentDestroy;
+                    //I need to find a way to decide the _content gameObject based on what object was paired to a specific PCF/CFUID
+                    //Or maybe I can take storedBinding.PrefabType and spawn 
 
-                    ++numPersistentContentRegained;
-                    _persistentContentMap.Add(persistentContent, "Regained");
+                    GameObject gameObj = null;
+
+                    if (deviceManager.deviceDictionary.TryGetValue(storedBinding.Id, out gameObj))
+                    {
+                        Debug.Log("Inside RegainAllStoredBindings - deviceDictionary ID compare worked " + storedBinding.Id);
+
+                        PersistentDevice persistentContent = gameObj.GetComponent<PersistentDevice>();
+
+                        persistentContent.DeviceTransformBinding = storedBinding;
+                        persistentContent.DeviceTransformBinding.Bind(pcf, gameObj.transform, true);
+
+                        //do i need the contentTap?
+                        //ContentTap contentTap = persistentContent.GetComponent<ContentTap>();
+                        //contentTap.OnContentTap += OnContentDestroy;
+
+                        ++numPersistentContentRegained;
+                        _persistentContentMap.Add(persistentContent, "Regained");
+
+                    }
+                    else
+                    {
+                        Debug.Log("Inside RegainAllStoredBindings - deviceDictionary ID compare failed" + storedBinding.Id);
+                        Debug.Log("deleting Binding");
+                        deleteBindings.Add(storedBinding);
+
+                    }
+
                 }
                 else
                 {
@@ -303,24 +340,52 @@ namespace MagicLeap
         /// </summary>
         /// <param name="position">Position to spawn the content at.</param>
         /// <param name="rotation">Rotation to spawn the content at.</param>
-        private void CreateContent(Vector3 position, Quaternion rotation, string prefabType)
+        public void CreateDevicePCF(GameObject gameObj)
         {
-            GameObject gameObj = Instantiate(_content, position, rotation);
+            
+            //GameObject gameObj = Instantiate(prefab, myController.attachPoint.transform.position, myController.attachPoint.transform.rotation);
+            
             #if PLATFORM_LUMIN
-            MLPersistentCoordinateFrames.FindClosestPCF(position, out MLPersistentCoordinateFrames.PCF pcf);
-            PersistentBall persistentContent = gameObj.GetComponent<PersistentBall>();
+            MLPersistentCoordinateFrames.FindClosestPCF(myController.attachPoint.transform.position, out MLPersistentCoordinateFrames.PCF pcf);
+
+            PersistentDevice persistentContent = gameObj.GetComponent<PersistentDevice>();
 
             //I should be able to change out "ball" with whatever I want to drop in. 
-            persistentContent.BallTransformBinding = new TransformBinding(gameObj.GetInstanceID().ToString(), prefabType);
+            persistentContent.DeviceTransformBinding = new TransformBinding(gameObj.GetInstanceID().ToString(), persistentContent.deviceData.prefabType);
 
-            persistentContent.BallTransformBinding.Bind(pcf, gameObj.transform);
+            //**save the persistent data's id to match the transformbinding's id.
 
-            Debug.Log("Inside Create Content " + persistentContent.BallTransformBinding.Id + " Prefab type : " + persistentContent.BallTransformBinding.PrefabType);
-            ContentTap contentTap = persistentContent.GetComponent<ContentTap>();
-            contentTap.OnContentTap += OnContentDestroy;
+            persistentContent.DeviceTransformBinding.Bind(pcf, gameObj.transform);
+
+            Debug.Log("Inside Create Content " + persistentContent.DeviceTransformBinding.Id + " Prefab type : " + persistentContent.DeviceTransformBinding.PrefabType);
+
+            //ContentTap contentTap = persistentContent.GetComponent<ContentTap>();
+            //contentTap.OnContentTap += OnContentDestroy;
             ++numPersistentContentCreated;
+
+            //deviceManager.devicePrefabDictionary.Add(persistentContent.DeviceTransformBinding.Id, gameObj);
+            //deviceManager.deviceDataDictionary.Add(persistentContent.DeviceTransformBinding.Id, 
+            //    new PersistentDeviceData(persistentContent.DeviceTransformBinding.Id, gameObj.name, "DevicePrefab"));
+
+            Debug.Log("Inside Create Content- persistentContent.deviceData id = " + persistentContent.deviceData.id);
+            //for Data Serialization and saving
+            deviceManager.deviceDataDictionary.Add(persistentContent.DeviceTransformBinding.Id, persistentContent.deviceData);
+
+            //for device placement and PCF attatchment
+            deviceManager.deviceDictionary.Add(persistentContent.DeviceTransformBinding.Id, gameObj);
+
+            deviceManager.SaveDevices();
+
             _persistentContentMap.Add(persistentContent, "Created");
             #endif
+
+            //Turn on DevicePlacement On
+            myController.selectedGameObject = gameObj;
+
+            Debug.Log("Turn On placement after placing device" + persistentContent.deviceData.id);
+            myController.devicePlacementActive = true;
+            myController.attachPoint.transform.position = gameObj.transform.position;
+
         }
 
         /// <summary>
@@ -330,7 +395,7 @@ namespace MagicLeap
         private void OnContentDestroy(GameObject content)
         {
             #if PLATFORM_LUMIN
-            PersistentBall persistentContent = content.GetComponent<PersistentBall>();
+            PersistentDevice persistentContent = content.GetComponent<PersistentDevice>();
 
             //** how does this get a specific dictionary entry if the key is the same for every entry? Maybe I dont know how dictionaries work.
             if (_persistentContentMap.ContainsKey(persistentContent))
@@ -341,24 +406,24 @@ namespace MagicLeap
                 {
                     --numPersistentContentCreated;
                 }
-                else if(val == "Regained")
+                else if (val == "Regained")
                 {
                     --numPersistentContentRegained;
                 }
 
                 _persistentContentMap.Remove(persistentContent);
             }
-            #endif
+#endif
         }
 
         private void HandleOnFindAllPCFs(List<MLPersistentCoordinateFrames.PCF> allPCFs)
         {
-            #if PLATFORM_LUMIN
+#if PLATFORM_LUMIN
             numTotalPCFs = allPCFs.Count;
             numSingerUserSingleSessionPCFs = allPCFs.FindAll((MLPersistentCoordinateFrames.PCF pcf) => { return pcf.Type == MLPersistentCoordinateFrames.PCF.Types.SingleUserSingleSession; }).Count;
             numSingleUserMultiSessionPCFs = allPCFs.FindAll((MLPersistentCoordinateFrames.PCF pcf) => { return pcf.Type == MLPersistentCoordinateFrames.PCF.Types.SingleUserMultiSession; }).Count;
             numMultiUserMultiSessionPCFs = allPCFs.FindAll((MLPersistentCoordinateFrames.PCF pcf) => { return pcf.Type == MLPersistentCoordinateFrames.PCF.Types.MultiUserMultiSession; }).Count;
-            #endif
+#endif
         }
 
         /// <summary>
@@ -373,17 +438,18 @@ namespace MagicLeap
                 return;
             }
 
-#if PLATFORM_LUMIN
+            //will no longer need the bumper press.
+            #if PLATFORM_LUMIN
             if (button == MLInput.Controller.Button.Bumper && MLPersistentCoordinateFrames.IsLocalized)
             {
                 Vector3 position = _controller.transform.position + _controller.transform.forward * _distance;
-                CreateContent(position, _controller.transform.rotation, "Prefab-Ball");
+                //CreateDevicePCF(position, _controller.transform.rotation, "Prefab-Ball");
             }
             else if (button == MLInput.Controller.Button.HomeTap)
             {
                 _pcfVisualizer.Toggle();
             }
-#endif
+            #endif
         }
 
         /// <summary>
@@ -428,26 +494,9 @@ namespace MagicLeap
                     if (_deleteAllSequenceFrameCount >= _deleteAllSequenceMinFrames)
                     {
                         _deleteAllInitiated = false;
+                        DeletePCFData();
 
-                        foreach(KeyValuePair<PersistentBall, string> persistentContentPair in _persistentContentMap)
-                        {
-                            PersistentBall persistentContent = persistentContentPair.Key;
 
-                            string val = _persistentContentMap[persistentContent];
-
-                            if (val == "Created")
-                            {
-                                --numPersistentContentCreated;
-                            }
-                            else if (val == "Regained")
-                            {
-                                --numPersistentContentRegained;
-                            }
-
-                            persistentContent.DestroyContent(persistentContent.gameObject);
-                        }
-
-                        _persistentContentMap.Clear();
                     }
                 }
 #endif
@@ -476,6 +525,29 @@ namespace MagicLeap
                 }
 #endif
             }
+        }
+
+        public void DeletePCFData()
+        {
+            foreach (KeyValuePair<PersistentDevice, string> persistentContentPair in _persistentContentMap)
+            {
+                PersistentDevice persistentContent = persistentContentPair.Key;
+
+                string val = _persistentContentMap[persistentContent];
+
+                if (val == "Created")
+                {
+                    --numPersistentContentCreated;
+                }
+                else if (val == "Regained")
+                {
+                    --numPersistentContentRegained;
+                }
+
+                persistentContent.DestroyContent(persistentContent.gameObject);
+            }
+
+            _persistentContentMap.Clear();
         }
     }
 }

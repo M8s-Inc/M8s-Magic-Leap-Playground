@@ -80,6 +80,7 @@ namespace MagicLeap.Core
             try
             {
                 File.WriteAllText(fullPath, jsonString);
+                Debug.Log("Inside save to file printing binding JSON " + fullPath + "\n  " + jsonString);
             }
             catch (IOException)
             {
@@ -109,6 +110,8 @@ namespace MagicLeap.Core
                 {
                     string jsonString = reader.ReadToEnd();
                     this.serializedData = JsonUtility.FromJson<SerializeBindings>(jsonString);
+                    Debug.Log("Inside load from file printing binding JSON " + fullPath + "\n  " + jsonString);
+
                     reader.Dispose();
                 }
                 else

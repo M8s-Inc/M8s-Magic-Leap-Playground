@@ -13,32 +13,35 @@ namespace MagicLeap
     /// feedback for when the user touches this content, displays the id of the content,
     /// and displays which PCF this content is bound to.
     /// </summary>
-    [RequireComponent(typeof(Collider), typeof(ContentTap))]
+
+    //[RequireComponent(typeof(Collider), typeof(ContentTap))]
     
     public class PersistentDevice : MonoBehaviour
     {
         //Sort of starting from scratch here. I need to move some of the tab and drag handlers for movement. I'll pass that to PlaceableDevice Script.     
 
+        public PersistentDeviceData deviceData;
+
         #if PLATFORM_LUMIN
         public TransformBinding DeviceTransformBinding = null;
         #endif
 
-        [SerializeField, Tooltip("Destroyed content effect.")]
-        private GameObject _destroyedContentEffect = null;
+        //[SerializeField, Tooltip("Destroyed content effect.")]
+        //private GameObject _destroyedContentEffect = null;
 
-        [SerializeField, Tooltip("Text to display name.")]
-        private TextMesh _nameText = null;
+        //[SerializeField, Tooltip("Text to display name.")]
+        //private TextMesh _nameText = null;
 
-        [SerializeField, Tooltip("The object that creates the highlight effect.")]
-        private GameObject _highlightEffect = null;
+        //[SerializeField, Tooltip("The object that creates the highlight effect.")]
+        //private GameObject _highlightEffect = null;
 
-        [SerializeField, Tooltip("LineRenderer that will point to the bound PCF.")]
-        private LineRenderer _lineToPCF = null;
+        //[SerializeField, Tooltip("LineRenderer that will point to the bound PCF.")]
+        //private LineRenderer _lineToPCF = null;
 
-        private Renderer[] _renderers = null;
-        private Collider _collider = null;
+        //private Renderer[] _renderers = null;
+        //private Collider _collider = null;
 
-        private ContentDragController _controllerDrag = null;
+        //private ContentDragController _controllerDrag = null;
 
         /// <summary>
         /// Validates parameters, initializes renderers, and listens to events.
@@ -46,46 +49,46 @@ namespace MagicLeap
         /// 
         void Start()
         {
-            if (_destroyedContentEffect == null)
-            {
-                Debug.LogError("Error: PersistentBall._destroyedContentEffect is not set, disabling script.");
-                enabled = false;
-                return;
-            }
+            //if (_destroyedContentEffect == null)
+            //{
+            //    Debug.LogError("Error: PersistentBall._destroyedContentEffect is not set, disabling script.");
+            //    enabled = false;
+            //    return;
+            //}
 
-            if (_nameText == null)
-            {
-                Debug.LogError("Error: PersistentBall._nameText is not set, disabling script.");
-                enabled = false;
-                return;
-            }
+            //if (_nameText == null)
+            //{
+            //    Debug.LogError("Error: PersistentBall._nameText is not set, disabling script.");
+            //    enabled = false;
+            //    return;
+            //}
 
-            if (_highlightEffect == null)
-            {
-                Debug.LogError("Error: PersistentBall._highlightEffect is not set, disabling script.");
-                enabled = false;
-                return;
-            }
-            _highlightEffect.SetActive(false);
+            //if (_highlightEffect == null)
+            //{
+            //    Debug.LogError("Error: PersistentBall._highlightEffect is not set, disabling script.");
+            //    enabled = false;
+            //    return;
+            //}
+            //_highlightEffect.SetActive(false);
 
-            if (_lineToPCF == null)
-            {
-                Debug.LogError("Error: PersistentBall._lineToPCF is not set, disabling script.");
-                enabled = false;
-                return;
-            }
+            //if (_lineToPCF == null)
+            //{
+            //    Debug.LogError("Error: PersistentBall._lineToPCF is not set, disabling script.");
+            //    enabled = false;
+            //    return;
+            //}
 
-            _lineToPCF.positionCount = 2;
-            _lineToPCF.enabled = false;
+            //_lineToPCF.positionCount = 2;
+            //_lineToPCF.enabled = false;
 
-            _renderers = GetComponentsInChildren<Renderer>();
-            _collider = GetComponent<Collider>();
+            //_renderers = GetComponentsInChildren<Renderer>();
+            //_collider = GetComponent<Collider>();
 
-            ContentTap contentTap = GetComponent<ContentTap>();
-            contentTap.OnContentTap += DestroyContent;
+            //ContentTap contentTap = GetComponent<ContentTap>();
+            //contentTap.OnContentTap += DestroyContent;
 
-            _nameText.transform.position = transform.position + new Vector3(0, 0.25f, 0);
-            _nameText.text = "Object ID:" + gameObject.GetInstanceID();
+            //_nameText.transform.position = transform.position + new Vector3(0, 0.25f, 0);
+            //_nameText.text = "Object ID:" + gameObject.GetInstanceID();
 
             #if PLATFORM_LUMIN
             MLResult result = MLPersistentCoordinateFrames.Start();
@@ -107,55 +110,56 @@ namespace MagicLeap
             MLPersistentCoordinateFrames.Stop();
             #endif
 
-            if (_controllerDrag != null)
-            {
-                _controllerDrag.OnDrag -= HandleOnDrag;
-                _controllerDrag.OnEndDrag -= HandleOnEndDrag;
-            }
+            //if (_controllerDrag != null)
+            //{
+            //    _controllerDrag.OnDrag -= HandleOnDrag;
+            //    _controllerDrag.OnEndDrag -= HandleOnEndDrag;
+            //}
         }
 
         /// <summary>
         /// Controller touches this content.
         /// </summary>
         /// <param name="other">Collider of Controller</param>
-        void OnTriggerEnter(Collider other)
-        {
-            ContentDragController controllerDrag = other.GetComponent<ContentDragController>();
-            if (controllerDrag == null)
-            {
-                return;
-            }
+        //void OnTriggerEnter(Collider other)
+        //{
+        //    ContentDragController controllerDrag = other.GetComponent<ContentDragController>();
+        //    if (controllerDrag == null)
+        //    {
+        //        return;
+        //    }
 
-            _controllerDrag = controllerDrag;
-            _controllerDrag.OnDrag += HandleOnDrag;
-            _controllerDrag.OnEndDrag += HandleOnEndDrag;
-            Highlight();
-        }
+        //    _controllerDrag = controllerDrag;
+        //    _controllerDrag.OnDrag += HandleOnDrag;
+        //    _controllerDrag.OnEndDrag += HandleOnEndDrag;
+        //    Highlight();
+        //}
 
         /// <summary>
         /// Controller leaves this content.
         /// </summary>
         /// <param name="other">Collider of Controller</param>
-        void OnTriggerExit(Collider other)
-        {
-            ContentDragController controllerDrag = other.GetComponent<ContentDragController>();
+        //void OnTriggerExit(Collider other)
+        //{
+        //    ContentDragController controllerDrag = other.GetComponent<ContentDragController>();
 
-            if (controllerDrag != null && _controllerDrag == controllerDrag)
-            {
-                _controllerDrag.OnDrag -= HandleOnDrag;
-                _controllerDrag.OnEndDrag -= HandleOnEndDrag;
-                _controllerDrag = null;
-                Unhighlight();
-            }
-        }
+        //    if (controllerDrag != null && _controllerDrag == controllerDrag)
+        //    {
+        //        _controllerDrag.OnDrag -= HandleOnDrag;
+        //        _controllerDrag.OnEndDrag -= HandleOnEndDrag;
+        //        _controllerDrag = null;
+        //        Unhighlight();
+        //    }
+        //}
 
         /// <summary>
         /// Destroys the given content and spawns another gameObject as a particle system effect.
         /// </summary>
         /// <param name="content">Content to destroy, assumed to be this content.</param>
+        //public void DestroyContent(GameObject content)
         public void DestroyContent(GameObject content)
         {
-            Instantiate(_destroyedContentEffect, transform.position, Quaternion.identity);
+            //Instantiate(_destroyedContentEffect, transform.position, Quaternion.identity);
             #if PLATFORM_LUMIN
             DeviceTransformBinding.UnBind();
             #endif
@@ -165,61 +169,61 @@ namespace MagicLeap
         /// <summary>
         /// Show visual effect when highlighting.
         /// </summary>
-        private void Highlight()
-        {
-            _highlightEffect.SetActive(true);
+//        private void Highlight()
+//        {
+//            _highlightEffect.SetActive(true);
 
-#           if PLATFORM_LUMIN
-            if (DeviceTransformBinding?.PCF != null && DeviceTransformBinding.PCF.CurrentResultCode == MLResult.Code.Ok)
-            {
-                _lineToPCF.SetPosition(0, transform.position);
-                _lineToPCF.SetPosition(1, DeviceTransformBinding.PCF.Position);
-                _lineToPCF.enabled = PCFVisualizer.IsVisualizing;
-            }
-            #endif
-        }
+//#           if PLATFORM_LUMIN
+//            if (DeviceTransformBinding?.PCF != null && DeviceTransformBinding.PCF.CurrentResultCode == MLResult.Code.Ok)
+//            {
+//                _lineToPCF.SetPosition(0, transform.position);
+//                _lineToPCF.SetPosition(1, DeviceTransformBinding.PCF.Position);
+//                _lineToPCF.enabled = PCFVisualizer.IsVisualizing;
+//            }
+//            #endif
+//        }
 
         /// <summary>
         /// Remove highlight visual effects.
         /// </summary>
-        private void Unhighlight()
-        {
-            _highlightEffect.SetActive(false);
-            _lineToPCF.enabled = false;
-        }
+        //private void Unhighlight()
+        //{
+        //    _highlightEffect.SetActive(false);
+        //    _lineToPCF.enabled = false;
+        //}
 
         /// <summary>
         /// Enable/Disable Renderers.
         /// </summary>
         /// <param name="enable">Toggle value</param>
-        private void EnableRenderers(bool enable)
-        {
-            foreach (Renderer r in _renderers)
-            {
-                r.enabled = enable;
-            }
-        }
+        //private void EnableRenderers(bool enable)
+        //{
+        //    foreach (Renderer r in _renderers)
+        //    {
+        //        r.enabled = enable;
+        //    }
+        //}
 
         //** These will be important, especially the HandleOnEndDrag
         /// <summary>
         /// Handle for OnDrag event.
         /// </summary>
-        private void HandleOnDrag()
-        {
-            _lineToPCF.SetPosition(0, transform.position);
-        }
+        //private void HandleOnDrag()
+        //{
+        //    _lineToPCF.SetPosition(0, transform.position);
+        //}
 
         /// <summary>
         /// Handle for OnEndDrag event.
         /// </summary>
-        private void HandleOnEndDrag()
-        {
-            #if PLATFORM_LUMIN
-            if (MLPersistentCoordinateFrames.IsLocalized)
-            {
-                DeviceTransformBinding.Update();
-            }
-            #endif
-        }
+        //private void HandleOnEndDrag()
+        //{
+        //    #if PLATFORM_LUMIN
+        //    if (MLPersistentCoordinateFrames.IsLocalized)
+        //    {
+        //        DeviceTransformBinding.Update();
+        //    }
+        //    #endif
+        //}
     }
 }

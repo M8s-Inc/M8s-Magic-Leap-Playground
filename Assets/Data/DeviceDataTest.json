@@ -1,0 +1,16 @@
+{
+  "testID 1": {
+    "id": "testID 1",
+    "deviceName": "Pubnub_Light1",
+    "prefabType": "Pubnub_Light",
+    "ipAddress": null,
+    "sortID": 0
+  },
+  "testID 2": {
+    "id": "testID 2",
+    "deviceName": "Crestron_Light1",
+    "prefabType": "Crestron_Light",
+    "ipAddress": null,
+    "sortID": 0
+  }
+}

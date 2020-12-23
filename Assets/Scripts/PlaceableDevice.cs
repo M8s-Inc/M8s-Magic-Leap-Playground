@@ -13,6 +13,7 @@ public class PlaceableDevice : MonoBehaviour
 
     public LayerMask m_defaultLayer;
 
+    [SerializeField]
     public M8MLController myController;
 
     [Header("Device Popup Refs")]
@@ -25,7 +26,9 @@ public class PlaceableDevice : MonoBehaviour
     public GameObject followButton;
     public GameObject unfollowButton;
 
+    [SerializeField]
     public UIManager uiManager;
+    public DeviceManager deviceManager;
 
     private void Awake()
     {
@@ -40,6 +43,7 @@ public class PlaceableDevice : MonoBehaviour
     #if PLATFORM_LUMIN
         //MLInput.OnTriggerDown -= HandleOnTriggerDown;
     #endif
+
     }
 
     // Start is called before the first frame update
@@ -134,8 +138,17 @@ public class PlaceableDevice : MonoBehaviour
                     {
                         //do I need this? or should this already be true before 
                         Debug.Log("Move button pressed inside " + this.gameObject.name);
-                        myController.devicePlacementActive = true;
+
+
+                        if(this.gameObject.GetComponent<MagicLeap.PlaceFromCamera>().enabled == true)
+                        {
+                            this.gameObject.GetComponent<MagicLeap.PlaceFromCamera>().enabled = false;
+                            ToggleFollowButton();
+                        }
+
                         CloseOptionsPopup();
+
+                        myController.devicePlacementActive = true;
 
                         //snap attach point to device.
                         //myController.attachPoint.transform.position = this.transform.position;
@@ -169,7 +182,12 @@ public class PlaceableDevice : MonoBehaviour
                     {
                         Debug.Log("delete button pressed inside " + this.gameObject.name);
                         CloseOptionsPopup();
-                        this.gameObject.SetActive(false);
+                        //this.gameObject.SetActive(false);
+
+                        //Delete This gameobject. Although I also need to delete this from the file...
+                        deviceManager.DeleteDevice(this.gameObject.GetComponent<MagicLeap.PersistentDevice>().deviceData);
+                        this.gameObject.GetComponent<MagicLeap.PersistentDevice>().DestroyContent(this.gameObject);
+
                     }
                 }
                 

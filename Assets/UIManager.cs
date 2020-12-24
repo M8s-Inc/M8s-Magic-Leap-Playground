@@ -46,6 +46,8 @@ public class UIManager : MonoBehaviour
 
     public bool otherMenuOpen = false;
 
+    public int triggerSubscription = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -101,30 +103,30 @@ public class UIManager : MonoBehaviour
                 }//Add Device Lights
                 else if (hit.transform.gameObject.name == "PubnubLight_Button")
                 {
-                    ClearMenu();
                     triggerPushed = true;
                     deviceManger.AddDevice("Pubnub_Light", "192.168.0.x");
+                    ClearMenu();
+
                 }
                 else if (hit.transform.gameObject.name == "CrestronLight_Button")
                 {
                     //OpenPage(addDevice_TVCanvas);
-                    ClearMenu();
                     triggerPushed = true;
+                    ClearMenu();
                 }
                 else if (hit.transform.gameObject.name == "CrestronAppleTV_Button")
                 {
-                    ClearMenu();
                     triggerPushed = true;
                     deviceManger.AddDevice("Crestron_AppleTV", "192.168.0.x");
+                    ClearMenu();
                 }
                 else if (hit.transform.gameObject.name == "DeleteAll_Button")
                 {
                     Debug.Log("Delete Device Data & PCFs");
-                    ClearMenu();
                     triggerPushed = true;
                     deviceManger.DeleteDevices();
                     myPCF.DeletePCFData();
-
+                    ClearMenu();
                 }
                 //do i even need this? I think i'll make do with the controller.
 
@@ -168,6 +170,7 @@ public class UIManager : MonoBehaviour
                 currentMenuPage = mainMenuCanvas;
                 currentMenuPage.SetActive(true);
                 menuClosed = false;
+                UnsubscribeControllerTrigger();
             }
             else if (currentMenuPage == mainMenuCanvas)
             {
@@ -176,6 +179,7 @@ public class UIManager : MonoBehaviour
                 previousMenuPage = null;
                 currentMenuPage = null;
                 menuClosed = true;
+                SubscribeControllerTrigger();
             }
             else
             {
@@ -193,7 +197,7 @@ public class UIManager : MonoBehaviour
         previousMenuPage = null;
 
         menuClosed = true;
-
+        SubscribeControllerTrigger();
     }
 
     void OpenPreviousPage()
@@ -208,6 +212,7 @@ public class UIManager : MonoBehaviour
             Debug.Log("Closing Main Menu from button");
             currentMenuPage = null;
             menuClosed = true;
+            SubscribeControllerTrigger();
 
         }
         else
@@ -239,4 +244,17 @@ public class UIManager : MonoBehaviour
         MLInput.OnControllerButtonDown -= OnButtonDown;
 
     }
+
+    private void UnsubscribeControllerTrigger()
+    {
+        triggerSubscription--;
+        myController.UnsubscribeTriggerDown();
+    }
+
+    private void SubscribeControllerTrigger()
+    {
+        triggerSubscription++;
+        myController.SubscribeTriggerDown();
+    }
+
 }

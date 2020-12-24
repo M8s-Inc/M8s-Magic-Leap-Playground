@@ -431,12 +431,14 @@ public class M8MLController : MonoBehaviour
 
     public void SubscribeTriggerDown()
     {
+        Debug.Log("Inside SubscribeTriggerDown");
         MLInput.OnTriggerDown += HandleOnTriggerDown;
         triggerSubscribeNum++;
     }
 
     public void UnsubscribeTriggerDown()
     {
+        Debug.Log("Inside UnsubscribeTriggerDown");
         MLInput.OnTriggerDown -= HandleOnTriggerDown;
         triggerSubscribeNum--;
     }

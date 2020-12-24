@@ -170,7 +170,7 @@ public class DeviceManager : MonoBehaviour
                 //persistentContent.deviceData.deviceName = device.Value.deviceName;
 
                 persistentContent.deviceData.deviceName = device.Value.prefabType + device.Value.id;
-
+                gameObj.name = persistentContent.deviceData.deviceName;
 
                 deviceDictionary.Add(device.Value.id, gameObj);
 
@@ -205,26 +205,33 @@ public class DeviceManager : MonoBehaviour
 
     public void DeleteDevices()
     {
+        //Ok this utilzation breaks the controller. 
         // check if file exists
-        if (!File.Exists(fullPath_deviceData))
-        {
-            Debug.Log( "no " + fullPath_deviceData + " file exists" );
-        }
-        else
-        {
-            //Delete Data file
-            Debug.Log(fullPath_deviceData + " file exists, deleting..." );
+        //if (!File.Exists(fullPath_deviceData))
+        //{
+        //    Debug.Log( "no " + fullPath_deviceData + " file exists" );
+        //}
+        //else
+        //{
+        //    //Delete Data file
+        //    Debug.Log(fullPath_deviceData + " file exists, deleting..." );
 
-            //File.Delete(fullPath_deviceData);
-            File.WriteAllText(fullPath_deviceData,"");
+        //    //File.Delete(fullPath_deviceData);
+        //    File.WriteAllText(fullPath_deviceData,"");
 
-        }
+        //}
 
-        //delete device dictionary and gameObjects
-        foreach (var device in deviceDictionary)
+        ////delete device dictionary and gameObjects
+        //foreach (var device in deviceDictionary)
+        //{
+        //    Debug.Log("Destroying device gameobject " + device.Value.gameObject.name);
+        //    Destroy(device.Value.gameObject);
+        //}
+
+        Debug.Log("Deleting All Devices");
+        foreach(var device in deviceDataDictionary)
         {
-            Debug.Log("Destroying device gameobject " + device.Value.gameObject.name);
-            Destroy(device.Value.gameObject);
+            DeleteDevice(device.Value);
         }
     }
 
@@ -239,6 +246,7 @@ public class DeviceManager : MonoBehaviour
             //success
             Debug.Log("Deleting device with id " + deviceData.id);
             deviceDataDictionary.Remove(deviceData.id);
+            deviceDictionary.Remove(deviceData.id);
             SaveDevices();
         }
         else

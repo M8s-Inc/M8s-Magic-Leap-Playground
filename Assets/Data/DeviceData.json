@@ -1,22 +1,15 @@
 {
-  "-30526": {
-    "id": "-30526",
-    "deviceName": "Crestron_AppleTV-30526",
+  "-104518": {
+    "id": "-104518",
+    "deviceName": "Crestron_AppleTV-104518",
     "prefabType": "Crestron_AppleTV",
     "ipAddress": "192.168.0.x",
     "sortID": 0
   },
-  "-31062": {
-    "id": "-31062",
-    "deviceName": "Crestron_AppleTV-31062",
+  "-105044": {
+    "id": "-105044",
+    "deviceName": "Crestron_AppleTV-105044",
     "prefabType": "Crestron_AppleTV",
-    "ipAddress": "192.168.0.x",
-    "sortID": 0
-  },
-  "-31596": {
-    "id": "-31596",
-    "deviceName": "Pubnub_Light-31596",
-    "prefabType": "Pubnub_Light",
     "ipAddress": "192.168.0.x",
     "sortID": 0
   }

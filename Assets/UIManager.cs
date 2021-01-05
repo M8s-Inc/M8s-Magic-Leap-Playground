@@ -125,7 +125,8 @@ public class UIManager : MonoBehaviour
                     Debug.Log("Delete Device Data & PCFs");
                     triggerPushed = true;
                     deviceManger.DeleteDevices();
-                    myPCF.DeletePCFData();
+                    //Do I need this given what I'm doing with the delete functions?
+                    //myPCF.DeletePCFData();
                     ClearMenu();
                 }
                 //do i even need this? I think i'll make do with the controller.

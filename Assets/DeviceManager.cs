@@ -19,6 +19,7 @@ public class DeviceManager : MonoBehaviour
     public List<GameObject> devicePrefabs = new List<GameObject>();
 
     public Dictionary<string, PersistentDeviceData> deviceDataDictionary;
+    public Dictionary<string, GameObject> deviceDictionary = new Dictionary<string, GameObject>();
 
     private string fileName_deviceData = "DeviceData.json";
     private string fileName_deviceDictionary = "DeviceDictionary.json";
@@ -27,7 +28,6 @@ public class DeviceManager : MonoBehaviour
     string fullPath_deviceDictionary;
 
     //so I can translate from an ID to what gameobject to be instantiated.
-    public Dictionary<string, GameObject> deviceDictionary = new Dictionary<string, GameObject>();
 
 
     // Start is called before the first frame update
@@ -189,6 +189,9 @@ public class DeviceManager : MonoBehaviour
             Debug.Log("device name: " + device.Value.name + "  prefab type: " + device.Value.GetComponent<MagicLeap.PersistentDevice>().deviceData.prefabType + "  ID : " + device.Value.GetComponent<MagicLeap.PersistentDevice>().deviceData.id);
         }
 
+        Debug.Log("Device Data Dictionary count " + deviceDataDictionary.Count);
+        Debug.Log("Device Dictionary count " + deviceDictionary.Count);
+
         //myPCF.deviceDictionary = deviceDictionary;
     }
 
@@ -197,42 +200,52 @@ public class DeviceManager : MonoBehaviour
     {
 
         //File.WriteAllText(@"c:\movie.json", JsonConvert.SerializeObject(persistentDevices, Formatting.Indented));
+        Debug.Log("Saving deviceDataDictionary.");
 
         File.WriteAllText(fullPath_deviceData, JsonConvert.SerializeObject(deviceDataDictionary, Formatting.Indented));
-        Debug.Log("Will this even work? Save Device Dictionary.");
+
+        //Debug.Log("Will this even work? Save Device Dictionary.");
         //File.WriteAllText(fullPath_deviceDictionary, JsonConvert.SerializeObject(deviceDictionary, Formatting.Indented));
     }
 
     public void DeleteDevices()
     {
-        //Ok this utilzation breaks the controller. 
+        //Ok this utilzation breaks the controller. lets try to modify it. 
         // check if file exists
-        //if (!File.Exists(fullPath_deviceData))
-        //{
-        //    Debug.Log( "no " + fullPath_deviceData + " file exists" );
-        //}
-        //else
-        //{
-        //    //Delete Data file
-        //    Debug.Log(fullPath_deviceData + " file exists, deleting..." );
-
-        //    //File.Delete(fullPath_deviceData);
-        //    File.WriteAllText(fullPath_deviceData,"");
-
-        //}
-
-        ////delete device dictionary and gameObjects
-        //foreach (var device in deviceDictionary)
-        //{
-        //    Debug.Log("Destroying device gameobject " + device.Value.gameObject.name);
-        //    Destroy(device.Value.gameObject);
-        //}
-
-        Debug.Log("Deleting All Devices");
-        foreach(var device in deviceDataDictionary)
+        if (!File.Exists(fullPath_deviceData))
         {
-            DeleteDevice(device.Value);
+            Debug.Log( "no " + fullPath_deviceData + " file exists" );
         }
+        else
+        {
+            //Delete Data file
+            Debug.Log(fullPath_deviceData + " file exists, deleting..." );
+
+            //File.Delete(fullPath_deviceData);
+            File.WriteAllText(fullPath_deviceData,"");
+
+        }
+
+        //delete device dictionary and gameObjects
+        foreach (var device in deviceDictionary)
+        {
+            Debug.Log("Destroying device gameobject " + device.Value.gameObject.name);
+            Destroy(device.Value.gameObject);
+        }
+
+        deviceDictionary.Clear();
+        deviceDataDictionary.Clear();
+
+        //Debug.Log("Deleting All Devices");
+        //foreach(var device in deviceDictionary)
+        //{
+        //    DeleteDevice(device.Value.GetComponent<MagicLeap.PersistentDevice>().deviceData);
+        //    device.Value.GetComponent<MagicLeap.PersistentDevice>().DestroyContent(this.gameObject);
+        //}
+
+        //this is from the single device deletion. so maybe I'm missing something. 
+        //deviceManager.DeleteDevice(this.gameObject.GetComponent<MagicLeap.PersistentDevice>().deviceData);
+        //this.gameObject.GetComponent<MagicLeap.PersistentDevice>().DestroyContent(this.gameObject);
     }
 
     public void DeleteDevice(PersistentDeviceData deviceData)

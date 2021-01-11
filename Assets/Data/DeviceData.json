@@ -1,16 +1,1 @@
-{
-  "-104518": {
-    "id": "-104518",
-    "deviceName": "Crestron_AppleTV-104518",
-    "prefabType": "Crestron_AppleTV",
-    "ipAddress": "192.168.0.x",
-    "sortID": 0
-  },
-  "-105044": {
-    "id": "-105044",
-    "deviceName": "Crestron_AppleTV-105044",
-    "prefabType": "Crestron_AppleTV",
-    "ipAddress": "192.168.0.x",
-    "sortID": 0
-  }
-}
+{}

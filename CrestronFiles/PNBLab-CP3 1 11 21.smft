@@ -1,0 +1,13 @@
+<Device Model="CP3">
+   <Network Type="Cresnet" Id="01"/>
+   <Network Type="Ethernet" Id="02">
+      <Device Model="Crestron_App" DeviceId="E0" Name="Crestron App"/>
+      <Device Model="Crestron_App" DeviceId="E1" Name="Crestron App"/>
+      <Device Model="CEN-GWEXER" DeviceId="E5">
+         <Network Type="RF">
+            <Device Model="GLS-OIR-CSM-EX-BATT" DeviceId="08"/>
+            <Device Model="HR-310,HRI-310" DeviceId="09" Name="HR-310"/>
+         </Network>
+      </Device>
+   </Network>
+</Device>

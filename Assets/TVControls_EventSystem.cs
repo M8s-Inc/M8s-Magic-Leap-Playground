@@ -36,6 +36,26 @@ public class TVControls_EventSystem : MonoBehaviour
         }
     }
 
+    public event Action<int> onXRButtonPressed;
+
+    public void XRButtonPressed(int id)
+    {
+        if (onXRButtonPressed != null)
+        {
+            onXRButtonPressed(id);
+        }
+    }
+
+    public event Action<int> onXRButtonReleased;
+
+    public void XRButtonReleased(int id)
+    {
+        if (onXRButtonReleased != null)
+        {
+            onXRButtonReleased(id);
+        }
+    }
+
     //// Start is called before the first frame update
     //void Start()
     //{

@@ -14,6 +14,9 @@ public class DoorController : MonoBehaviour
         TVControls_EventSystem.current.onDoorwayTriggerEnter += OnDoorwayOpen;
         TVControls_EventSystem.current.onDoorwayTriggerEnter += OnDoorwayClose;
 
+        TVControls_EventSystem.current.onXRButtonPressed += OnXRButtonPress;
+        TVControls_EventSystem.current.onXRButtonReleased += onXRButtonRelease;
+
     }
 
     private void OnDoorwayOpen(int id)
@@ -36,9 +39,32 @@ public class DoorController : MonoBehaviour
         }
     }
 
+    private void OnXRButtonPress(int id)
+    {
+
+        //call some function
+        if (id == DoorID)
+        {
+            Debug.Log("XR Button Pressed: " + DoorID);
+        }
+    }
+
+    private void onXRButtonRelease(int id)
+    {
+
+        //call some function
+        if (id == DoorID)
+        {
+            Debug.Log("Close the door");
+        }
+    }
+
     private void OnDestroy()
     {
         TVControls_EventSystem.current.onDoorwayTriggerEnter -= OnDoorwayOpen;
         TVControls_EventSystem.current.onDoorwayTriggerEnter -= OnDoorwayClose;
+
+        TVControls_EventSystem.current.onXRButtonPressed -= OnXRButtonPress;
+        TVControls_EventSystem.current.onXRButtonReleased -= onXRButtonRelease;
     }
 }

@@ -17,6 +17,9 @@ public class XRButton : MonoBehaviour
 
     float currenttime;
 
+    float pressHeight;
+
+    public int buttonID;
 
     void Start()
     {
@@ -25,6 +28,9 @@ public class XRButton : MonoBehaviour
 
         isPressed = false;
         currenttime = delay;
+
+        //i want to trigger the event when the current buttonPosition < the pressHeight
+        pressHeight = (end.localPosition.y - start.localPosition.y)/3;
     }
 
     private void Update()
@@ -108,6 +114,11 @@ public class XRButton : MonoBehaviour
                 Debug.Log(this.name + "local position inside press animation trigger. y pos:" + transform.position.y);
                 //anim.enabled = true;
                 //anim.SetTrigger("ButtonPressed");
+
+                //Trigger Button Down Pressed/Released event. I need to figure out something for holding it down.
+                TVControls_EventSystem.current.XRButtonPressed(buttonID);
+
+
             }
 
             Debug.Log(this.name + "XR Button Trigger Exity pos:" + transform.position.y + " & " + end.position.y);

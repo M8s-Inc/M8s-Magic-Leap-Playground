@@ -690,7 +690,7 @@ PlayerSettings:
     m_ModelFolderPath: 
     m_PortalFolderPath: 
   luminCert:
-    m_CertPath: C:/Users/Zach/Downloads/Unity-Project-Template-2019.2.3f1/Unity-Project-Template-2019.2.3f1/pixnbits_1.cert
+    m_CertPath: xnbits_1.cert/Downloads/Unity-Project-Template-2019.2.3f1/Unity-Project-Template-2019.2.3f1/pixnbits_1.cert
     m_SignPackage: 1
   luminIsChannelApp: 0
   luminVersion:

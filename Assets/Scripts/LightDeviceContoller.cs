@@ -10,7 +10,7 @@ public class LightDeviceContoller : MonoBehaviour
     //Magic Leap Controller
     public MagicLeapController m_magicLeapController;
 
-    public bool m_gFocusOfGaze;
+    public bool m_focusOfGaze;
 
     [SerializeField, Tooltip("Last Left hand pose")]
     public CurrentLeftHandPose lastLeftHandPose;
@@ -44,7 +44,7 @@ public class LightDeviceContoller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_gFocusOfGaze = false;
+        m_focusOfGaze = false;
         m_meshRenderer = GetComponent<MeshRenderer>();
         //m_defaultMaterial = GetComponent<MeshRenderer>().GetComponent<Material>();
         //m_defaultMaterial2 = GetComponent<Material>();
@@ -64,7 +64,7 @@ public class LightDeviceContoller : MonoBehaviour
     void Update()
     {
         //Enable hand gesture inputs if object is being focused. Maybe I need to create an invisible bubble to expand the raycast-hitable area.
-        if(m_gFocusOfGaze)
+        if(m_focusOfGaze)
         {
             deviceUI.SetActive(true);
             popupAnim.SetTrigger("OpenPopup");
@@ -125,12 +125,12 @@ public class LightDeviceContoller : MonoBehaviour
 
     public void GazeFocusedOnDevice()
     {
-        m_gFocusOfGaze = true;
+        m_focusOfGaze = true;
     }
 
     public void ClearGazeOnDevice()
     {
-        m_gFocusOfGaze = false;
+        m_focusOfGaze = false;
     }
 
     IEnumerator WaitToDisableDeviceUI()
@@ -141,7 +141,7 @@ public class LightDeviceContoller : MonoBehaviour
         {
             yield return null;
 
-            if (m_gFocusOfGaze == true)
+            if (m_focusOfGaze == true)
             {
                 yield break;
             }

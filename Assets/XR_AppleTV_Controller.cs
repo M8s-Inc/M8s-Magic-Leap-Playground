@@ -28,7 +28,7 @@ public class XR_AppleTV_Controller : MonoBehaviour
         ConnectToTcpServer();
         
 
-        TVControls_EventSystem.current.onXRButtonPressed += OnXRButtonPress;
+        AppleTVControls_EventSystem.current.onXRButtonPressed += OnXRButtonPress;
         //TVControls_EventSystem.current.onXRButtonReleased += onXRButtonRelease;
 
         //If I use onValueChanged, will this send every damn time the value is updated? for playtime that doesnt work. 
@@ -310,6 +310,6 @@ public class XR_AppleTV_Controller : MonoBehaviour
     private void OnDestroy()
     {
         TVControls_EventSystem.current.onXRButtonPressed -= OnXRButtonPress;
-        TVControls_EventSystem.current.onXRButtonReleased -= onXRButtonRelease;
+        //TVControls_EventSystem.current.onXRButtonReleased -= onXRButtonRelease;
     }
 }

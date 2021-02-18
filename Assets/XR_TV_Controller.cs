@@ -296,6 +296,6 @@ public class XR_TV_Controller : MonoBehaviour
     private void OnDestroy()
     {
         TVControls_EventSystem.current.onXRButtonPressed -= OnXRButtonPress;
-        TVControls_EventSystem.current.onXRButtonReleased -= onXRButtonRelease;
+        //TVControls_EventSystem.current.onXRButtonReleased -= onXRButtonRelease;
     }
 }

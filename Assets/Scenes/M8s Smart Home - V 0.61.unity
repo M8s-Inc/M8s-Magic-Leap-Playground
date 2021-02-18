@@ -1946,6 +1946,7 @@ MonoBehaviour:
   isPressed: 0
   delay: 0.5
   maxbuttonRiseDelta: 0.05
+  buttonType: AppleTV
   buttonID: 2
 --- !u!23 &115970715
 MeshRenderer:
@@ -6039,6 +6040,7 @@ MonoBehaviour:
   isPressed: 0
   delay: 0.5
   maxbuttonRiseDelta: 0.05
+  buttonType: AppleTV
   buttonID: 9
 --- !u!23 &460231769
 MeshRenderer:
@@ -7054,6 +7056,7 @@ MonoBehaviour:
   isPressed: 0
   delay: 0.5
   maxbuttonRiseDelta: 0.05
+  buttonType: AppleTV
   buttonID: 10
 --- !u!23 &530951022
 MeshRenderer:
@@ -10616,6 +10619,7 @@ MonoBehaviour:
   isPressed: 0
   delay: 0.5
   maxbuttonRiseDelta: 0.05
+  buttonType: AppleTV
   buttonID: 1
 --- !u!23 &678481905
 MeshRenderer:
@@ -12449,6 +12453,7 @@ MonoBehaviour:
   isPressed: 0
   delay: 0.5
   maxbuttonRiseDelta: 0.05
+  buttonType: AppleTV
   buttonID: 12
 --- !u!23 &781701830
 MeshRenderer:
@@ -27320,6 +27325,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1843600709}
   - component: {fileID: 1843600710}
+  - component: {fileID: 1843600711}
   m_Layer: 0
   m_Name: TV XR Control Panel
   m_TagString: Untagged
@@ -27353,6 +27359,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 37830fc1111cd487680883afcdf79e77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1843600711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843600708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00dfacc81d7644101a8e66b6bc69b6ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1844038363
@@ -28223,6 +28241,7 @@ MonoBehaviour:
   isPressed: 0
   delay: 0.5
   maxbuttonRiseDelta: 0.05
+  buttonType: AppleTV
   buttonID: 11
 --- !u!23 &1880814837
 MeshRenderer:
@@ -31339,6 +31358,7 @@ MonoBehaviour:
   isPressed: 0
   delay: 0.5
   maxbuttonRiseDelta: 0.05
+  buttonType: AppleTV
   buttonID: 8
 --- !u!23 &2121461486
 MeshRenderer:
@@ -36289,6 +36309,7 @@ MonoBehaviour:
   isPressed: 0
   delay: 0.5
   maxbuttonRiseDelta: 0.05
+  buttonType: AppleTV
   buttonID: 7
 --- !u!95 &4274658252747354761
 Animator:
@@ -36631,6 +36652,7 @@ MonoBehaviour:
   isPressed: 0
   delay: 0.5
   maxbuttonRiseDelta: 0.05
+  buttonType: AppleTV
   buttonID: 3
 --- !u!95 &4892618439917695837
 Animator:
@@ -36987,6 +37009,7 @@ MonoBehaviour:
   isPressed: 0
   delay: 0.5
   maxbuttonRiseDelta: 0.05
+  buttonType: 
   buttonID: 1
 --- !u!95 &4892618441423764261
 Animator:
@@ -37372,6 +37395,7 @@ MonoBehaviour:
   isPressed: 0
   delay: 0.5
   maxbuttonRiseDelta: 0.05
+  buttonType: AppleTV
   buttonID: 5
 --- !u!95 &5047187413266479039
 Animator:
@@ -40243,6 +40267,7 @@ MonoBehaviour:
   isPressed: 0
   delay: 0.5
   maxbuttonRiseDelta: 0.05
+  buttonType: AppleTV
   buttonID: 6
 --- !u!33 &8484248107761065882
 MeshFilter:
@@ -42876,6 +42901,7 @@ MonoBehaviour:
   isPressed: 0
   delay: 0.5
   maxbuttonRiseDelta: 0.05
+  buttonType: AppleTV
   buttonID: 4
 --- !u!95 &9171565456016816893
 Animator:

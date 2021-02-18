@@ -19,6 +19,7 @@ public class XRButton : MonoBehaviour
 
     float pressHeight;
 
+    public string buttonType;
     public int buttonID;
 
     void Start()
@@ -116,8 +117,15 @@ public class XRButton : MonoBehaviour
                 //anim.SetTrigger("ButtonPressed");
 
                 //Trigger Button Down Pressed/Released event. I need to figure out something for holding it down.
-                TVControls_EventSystem.current.XRButtonPressed(buttonID);
 
+                if(buttonType == "TV")
+                {
+                    TVControls_EventSystem.current.XRButtonPressed(buttonID);
+                }
+                if (buttonType == "AppleTV")
+                {
+                    AppleTVControls_EventSystem.current.XRButtonPressed(buttonID);
+                }
 
             }
 

@@ -20,6 +20,15 @@ public class XR_TV_Controller : MonoBehaviour
 
     public string m_IPAddress;
     public string m_TV_Name;
+
+    public bool m_TV_On;
+    public bool m_volume_Muted;
+
+    public bool m_appleTV_Active;
+    public bool m_PS4_Active;
+    public bool m_nintendo_Active;
+    public bool m_PC_Active;
+   
     #endregion
 
     // Use this for initialization  
@@ -30,6 +39,9 @@ public class XR_TV_Controller : MonoBehaviour
         m_TV_Name = "LoftAV";
 
         TVControls_EventSystem.current.onXRButtonPressed += OnXRButtonPress;
+        TVControls_EventSystem.current.onXRSliderReleased += OnXRSliderReleased;
+
+
         //TVControls_EventSystem.current.onXRButtonReleased += onXRButtonRelease;
 
         //If I use onValueChanged, will this send every damn time the value is updated? for playtime that doesnt work. 
@@ -53,7 +65,27 @@ public class XR_TV_Controller : MonoBehaviour
         }
     }
 
-    private void OnXRButtonPress(int id)
+    private void OnXRSliderReleased(int id, float value)
+    {
+        switch (id)
+        {
+            case 1: //If Volume Slider
+                Debug.Log("XR Volume Slider Released");
+                SliderTask("Volume", value);
+                break;
+            case 2: //If Playback Slider?
+                Debug.Log("XR Playback Slider Released");
+                SliderTask("Playback", value);
+                break;
+           
+            default:
+                Debug.Log("XR Slider not assigned an ID");
+                break;
+
+        }
+    }
+
+        private void OnXRButtonPress(int id)
     {
 
         /*
@@ -69,26 +101,44 @@ public class XR_TV_Controller : MonoBehaviour
             case 1:
                 Debug.Log("XR Button TV Power Toggle Pressed");
                 TaskWithParameters(m_TV_Name + "_Power_Toggle_Press");
+                m_TV_On = !m_TV_On;
                 break;
             case 2:
                 Debug.Log("XR Button AppleTV Source Pressed");
                 TaskWithParameters(m_TV_Name + "_AppleTV_Source_Press");
+                m_appleTV_Active = true;
+                m_PS4_Active = false;
+                m_nintendo_Active = false;
+                m_PC_Active = false;
                 break;
             case 3:
                 Debug.Log("XR Button PS4 Source Pressed");
                 TaskWithParameters(m_TV_Name + "_PS4_Source_Press");
+                m_appleTV_Active = false;
+                m_PS4_Active = true;
+                m_nintendo_Active = false;
+                m_PC_Active = false;
                 break;
             case 4:
                 Debug.Log("XR Button NintendoSwitch Source Pressed");
                 TaskWithParameters(m_TV_Name + "_NintendoSwitch_Source_Press");
+                m_appleTV_Active = false;
+                m_PS4_Active = false;
+                m_nintendo_Active = true;
+                m_PC_Active = false;
                 break;
             case 5:
                 Debug.Log("XR Button PC Source Pressed");
                 TaskWithParameters(m_TV_Name + "_PC_Source_Press");
+                m_appleTV_Active = false;
+                m_PS4_Active = false;
+                m_nintendo_Active = false;
+                m_PC_Active = true;
                 break;
             case 6:
                 Debug.Log("XR Button Volume Mute Pressed");
                 TaskWithParameters(m_TV_Name + "_MuteToggle_Press");
+                m_volume_Muted = !m_volume_Muted;
                 break;
             case 7:
                 Debug.Log("XR Button Volume Up Pressed");
@@ -111,8 +161,7 @@ public class XR_TV_Controller : MonoBehaviour
     }
 
     private void onXRButtonRelease(int id)
-    {
-
+    { 
         //call some function
         Debug.Log("Do I even need this?");
     }

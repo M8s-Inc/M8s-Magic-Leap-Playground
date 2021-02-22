@@ -120,6 +120,12 @@ public class UIManager : MonoBehaviour
                     deviceManger.AddDevice("Crestron_AppleTV", "192.168.0.x");
                     ClearMenu();
                 }
+                else if (hit.transform.gameObject.name == "TV_XR_Panel_Button")
+                {
+                    triggerPushed = true;
+                    deviceManger.AddDevice("TV_XR_Panel", "192.168.0.x");
+                    ClearMenu();
+                }
                 else if (hit.transform.gameObject.name == "DeleteAll_Button")
                 {
                     Debug.Log("Delete Device Data & PCFs");

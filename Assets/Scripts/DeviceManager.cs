@@ -73,11 +73,6 @@ public class DeviceManager : MonoBehaviour
             Debug.Log("Inside Device Management - Adding Crestron_AppleTV");
             prefab = devicePrefabs[2];
         }
-        else if (deviceToAdd == "TV_XR_Panel")
-        {
-            Debug.Log("Inside Device Management - Adding TV_XR_Panel");
-            prefab = devicePrefabs[3];
-        }
         else
         {
             Debug.Log("Inside Device Management - Adding else");
@@ -145,10 +140,6 @@ public class DeviceManager : MonoBehaviour
                 else if (device.Value.prefabType == "Crestron_AppleTV")
                 {
                     prefab = devicePrefabs[2];
-                }
-                else if (device.Value.prefabType == "TV_XR_Panel")
-                {
-                    prefab = devicePrefabs[3];
                 }
                 else
                 {

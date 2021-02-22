@@ -14,16 +14,27 @@ public class TVControls_EventSystem : MonoBehaviour
 
     }
 
-    public event Action<int,float> onXRSliderReleased;
 
-    public void XRSliderReleased(int id, float value)
+    public event Action<int> onDoorwayTriggerEnter;
+
+    public void DoorwayTriggerEnter(int id)
     {
-        if (onXRSliderReleased != null)
+        if(onDoorwayTriggerEnter != null)
         {
-            onXRSliderReleased(id, value);
+            onDoorwayTriggerEnter(id);
+
         }
     }
 
+    public event Action<int> OnDoorwayTriggerExit;
+    public void DoorwayTriggerExit(int id)
+    {
+        if (OnDoorwayTriggerExit != null)
+        {
+            OnDoorwayTriggerExit(id);
+
+        }
+    }
 
     public event Action<int> onXRButtonPressed;
 

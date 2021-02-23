@@ -28,7 +28,8 @@ public class XR_TV_Controller : MonoBehaviour
     public bool m_PS4_Active;
     public bool m_nintendo_Active;
     public bool m_PC_Active;
-   
+
+    public GameObject m_AppleTV_Controls; 
     #endregion
 
     // Use this for initialization  
@@ -110,6 +111,8 @@ public class XR_TV_Controller : MonoBehaviour
                 m_PS4_Active = false;
                 m_nintendo_Active = false;
                 m_PC_Active = false;
+
+                m_AppleTV_Controls.SetActive(true);
                 break;
             case 3:
                 Debug.Log("XR Button PS4 Source Pressed");
@@ -118,6 +121,9 @@ public class XR_TV_Controller : MonoBehaviour
                 m_PS4_Active = true;
                 m_nintendo_Active = false;
                 m_PC_Active = false;
+
+                m_AppleTV_Controls.SetActive(false);
+
                 break;
             case 4:
                 Debug.Log("XR Button NintendoSwitch Source Pressed");
@@ -126,6 +132,9 @@ public class XR_TV_Controller : MonoBehaviour
                 m_PS4_Active = false;
                 m_nintendo_Active = true;
                 m_PC_Active = false;
+
+                m_AppleTV_Controls.SetActive(false);
+            
                 break;
             case 5:
                 Debug.Log("XR Button PC Source Pressed");
@@ -134,6 +143,9 @@ public class XR_TV_Controller : MonoBehaviour
                 m_PS4_Active = false;
                 m_nintendo_Active = false;
                 m_PC_Active = true;
+
+                m_AppleTV_Controls.SetActive(false);
+        
                 break;
             case 6:
                 Debug.Log("XR Button Volume Mute Pressed");

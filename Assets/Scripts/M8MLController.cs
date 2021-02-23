@@ -207,7 +207,8 @@ public class M8MLController : MonoBehaviour
                 //Debug.Log("M8ML Controller Line Renderer Off");
 
                 //beamLine.enabled = false;
-                Debug.Log("Controller Raycast not hitting?");
+                //Debug.Log("Controller Raycast not hitting?");
+
                 beamLine.SetPosition(0, transform.position);
 
                 if (devicePlacementActive)

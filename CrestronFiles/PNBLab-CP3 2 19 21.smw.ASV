@@ -1390,6 +1390,7 @@ DvVr=1094
 Ad=06
 SmH=11
 RelStat=Release
+DbH=18
 mC=8
 C1=558
 C2=559
@@ -2729,6 +2730,15 @@ Mnf=Crestron
 Mdl=TCP/IP Server
 ]
 [
+ObjTp=Db
+H=18
+DvH=557
+Whc=3
+Mnf=Crestron
+Mdl=C2I-CP3-IR8
+Tpe=8 Port IR/Serial Card
+]
+[
 ObjTp=Cs
 H=1
 DvH=2
@@ -2961,7 +2971,7 @@ SmC=156
 Nm=Logic
 ObjVer=1
 SmVr=1094
-CF=1
+CF=2
 mC=10
 C1=74
 C2=126
@@ -6716,23 +6726,6 @@ P176=ZONE2_CAT+
 P177=ZONE2_CAT-
 P178=ZONE2_INPUT+
 P179=ZONE2_INPUT-
-]
-[
-ObjTp=Sm
-H=79
-SmC=96
-Nm=Serial to Analog
-ObjVer=1
-SmVr=1094
-PrH=246
-CF=1
-n1I=1
-n1O=1
-mI=1
-mO=1
-tO=1
-mP=1
-P1=
 ]
 [
 ObjTp=Sm
@@ -11946,7 +11939,7 @@ Nm=SUBSYSTEM
 ObjVer=1
 SmVr=1094
 PrH=4
-CF=1
+CF=2
 Cmn1=Unity TCP IP
 mC=2
 C1=244
@@ -12591,14 +12584,13 @@ Nm=SUBSYSTEM
 ObjVer=1
 SmVr=1094
 PrH=221
-CF=1
+CF=2
 Cmn1=LoftAV\\
-mC=5
+mC=4
 C1=256
 C2=222
 C3=247
 C4=257
-C5=79
 ]
 [
 ObjTp=Sm

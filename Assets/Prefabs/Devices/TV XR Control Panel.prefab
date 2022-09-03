@@ -2996,7 +2996,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AppleTVPlayTime_Slider: {fileID: 0}
-  m_ipAddress: 192.168.1.10
+  m_ipAddress: 192.168.1.148
   m_AppleTV_Name: M8s Loft 2.0
 --- !u!1 &5183435765287351800
 GameObject:
@@ -3977,7 +3977,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Volume_Slider: {fileID: 0}
-  m_IPAddress: 192.168.1.10
+  m_IPAddress: 192.168.1.148
   m_TV_Name: Loft AV
   m_TV_On: 0
   m_volume_Muted: 0

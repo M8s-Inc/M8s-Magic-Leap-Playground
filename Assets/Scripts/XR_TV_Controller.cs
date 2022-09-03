@@ -277,7 +277,9 @@ public class XR_TV_Controller : MonoBehaviour
         try
         {
             //IP Address of the crestron processer.
-            socketConnection = new TcpClient("192.168.1.10", 60001);    //was localhost     
+
+            //192.168.1.10 default?
+            socketConnection = new TcpClient(m_IPAddress, 60001);    //was localhost     
             Byte[] bytes = new Byte[1024];
             while (true)
             {

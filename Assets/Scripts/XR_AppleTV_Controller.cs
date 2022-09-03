@@ -224,7 +224,7 @@ public class XR_AppleTV_Controller : MonoBehaviour
         try
         {
             //IP Address of the crestron processer.
-            socketConnection = new TcpClient("192.168.1.10", 60000);    //was localhost     
+            socketConnection = new TcpClient(m_ipAddress, 60000);    //was localhost     
             Byte[] bytes = new Byte[1024];
             while (true)
             {

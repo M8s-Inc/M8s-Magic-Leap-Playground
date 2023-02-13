@@ -23871,7 +23871,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1696203003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28008,6 +28008,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f842183894b5de447a4dd584a8a45e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DeviceList: []
 --- !u!4 &2033205421
 Transform:
   m_ObjectHideFlags: 0
@@ -34302,35 +34303,65 @@ PrefabInstance:
       propertyPath: deviceManager
       value: 
       objectReference: {fileID: 2077002776}
+    - target: {fileID: 2661123909166822741, guid: becabc290f02ad24b8b6669f711fc65d,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2661123909166822748, guid: becabc290f02ad24b8b6669f711fc65d,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2661123909266946612, guid: becabc290f02ad24b8b6669f711fc65d,
+        type: 3}
+      propertyPath: goveeDevice.deviceName
+      value: Smartbulb3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2661123909266946612, guid: becabc290f02ad24b8b6669f711fc65d,
+        type: 3}
+      propertyPath: goveeDevice.device
+      value: CF:DB:D4:AD:FC:44:B2:22
+      objectReference: {fileID: 0}
+    - target: {fileID: 2661123909266946612, guid: becabc290f02ad24b8b6669f711fc65d,
+        type: 3}
+      propertyPath: goveeDevice.model
+      value: H6008
+      objectReference: {fileID: 0}
+    - target: {fileID: 2661123909266946612, guid: becabc290f02ad24b8b6669f711fc65d,
+        type: 3}
+      propertyPath: GoveeLightsManager
+      value: 
+      objectReference: {fileID: 2033205420}
+    - target: {fileID: 2661123909928118742, guid: becabc290f02ad24b8b6669f711fc65d,
+        type: 3}
+      propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2661123909928118742, guid: becabc290f02ad24b8b6669f711fc65d,
         type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0.271
-      objectReference: {fileID: 0}
-    - target: {fileID: 2661123909928118742, guid: becabc290f02ad24b8b6669f711fc65d,
-        type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.271
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2661123909928118742, guid: becabc290f02ad24b8b6669f711fc65d,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2661123909928118754, guid: becabc290f02ad24b8b6669f711fc65d,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.271
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2661123909928118754, guid: becabc290f02ad24b8b6669f711fc65d,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2661123910387635118, guid: becabc290f02ad24b8b6669f711fc65d,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4973206228821059554, guid: becabc290f02ad24b8b6669f711fc65d,
         type: 3}

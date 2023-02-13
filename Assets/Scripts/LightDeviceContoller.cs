@@ -15,6 +15,9 @@ public class LightDeviceContoller : MonoBehaviour
     [SerializeField, Tooltip("Last Left hand pose")]
     public CurrentLeftHandPose lastLeftHandPose;
 
+    public GoveeLightsManager.GoveeDevice goveeDevice;
+    public GoveeLightsManager GoveeLightsManager;
+
     //Materials
 
     public MeshRenderer m_meshRenderer;
@@ -76,6 +79,8 @@ public class LightDeviceContoller : MonoBehaviour
                 m_meshRenderer.material = currentMaterial;
                 lastLeftHandPose = CurrentLeftHandPose.OpenHand;
 
+                GoveeLightsManager.SetDeviceRGB(goveeDevice, 255, 255, 0);
+
             }
             else if (lastLeftHandPose != CurrentLeftHandPose.Finger && m_magicLeapController.m_currentLeftPose == CurrentLeftHandPose.Finger)
             {
@@ -83,6 +88,8 @@ public class LightDeviceContoller : MonoBehaviour
                 currentMaterial = m_mat1;
                 m_meshRenderer.material = currentMaterial;
                 lastLeftHandPose = CurrentLeftHandPose.Finger;
+
+                GoveeLightsManager.SetDeviceRGB(goveeDevice, 0, 0, 255);
             }
             else if (lastLeftHandPose != CurrentLeftHandPose.Fist && m_magicLeapController.m_currentLeftPose == CurrentLeftHandPose.Fist)
             {
@@ -91,6 +98,8 @@ public class LightDeviceContoller : MonoBehaviour
                 m_meshRenderer.material = currentMaterial;
                 lastLeftHandPose = CurrentLeftHandPose.OpenHand;
 
+                GoveeLightsManager.SetDeviceRGB(goveeDevice, 255, 0, 255);
+
             }
             else if (lastLeftHandPose != CurrentLeftHandPose.Ok && m_magicLeapController.m_currentLeftPose == CurrentLeftHandPose.Ok)
             {
@@ -98,6 +107,8 @@ public class LightDeviceContoller : MonoBehaviour
                 currentMaterial = m_mat3;
                 m_meshRenderer.material = currentMaterial;
                 lastLeftHandPose = CurrentLeftHandPose.Ok;
+
+                GoveeLightsManager.SetDeviceRGB(goveeDevice, 255, 0, 0);
             }
             //else if (lastLeftHandPose != CurrentLeftHandPose.None && m_magicLeapController.m_currentLeftPose == CurrentLeftHandPose.None)
             //{
